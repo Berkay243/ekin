@@ -1,0 +1,556 @@
+/* =========================================================
+   KELİMELİK / ÇAPRAZ BULMACA STİLLERİ (WORDLE DÜZ KOYU TEMA)
+   Arka Plan: #121213
+   Yeşil: #538d4e, Koyu Gri / Blok: #272729, Boş Harf: #1a1a1b
+   ========================================================= */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: #121213;
+  color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.app-container {
+  width: 100%;
+  max-width: 560px;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+}
+
+/* Üst Başlık */
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  border-bottom: 1px solid #3a3a3c;
+  height: 52px;
+}
+
+.header-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: 0.15rem;
+  text-align: center;
+  flex: 1;
+}
+
+.header-icon {
+  font-size: 1.2rem;
+  color: #818384;
+  user-select: none;
+  width: 24px;
+}
+
+/* Ana Alan */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 16px 12px;
+}
+
+.screen {
+  display: none;
+  width: 100%;
+  text-align: center;
+  animation: fadeIn 0.25s ease-out;
+}
+
+.screen.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 1. GİRİŞ EKRANI */
+.intro-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  padding: 80px 10px;
+}
+
+.sound-alert {
+  font-size: 0.95rem;
+  color: #818384;
+  font-weight: 500;
+}
+
+/* Butonlar */
+.btn {
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 4px;
+  padding: 13px 22px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.05rem;
+  transition: opacity 0.15s, background-color 0.15s;
+  touch-action: manipulation;
+}
+
+.btn:active {
+  opacity: 0.8;
+}
+
+.btn.primary {
+  background-color: #538d4e;
+  color: #ffffff;
+  width: 100%;
+  max-width: 300px;
+}
+
+.btn.primary:hover {
+  background-color: #487c43;
+}
+
+.btn.primary.big {
+  font-size: 1.05rem;
+  padding: 14px 28px;
+}
+
+.btn.ghost {
+  background-color: #3a3a3c;
+  color: #ffffff;
+  margin-top: 10px;
+  padding: 8px 16px;
+  font-size: 0.85rem;
+}
+
+.btn.ghost:hover {
+  background-color: #4f4f52;
+}
+
+.btn-inline {
+  width: auto;
+  padding: 0 20px;
+  height: 46px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* 2. KELİMELİK / ÇAPRAZ BULMACA IZGARASI */
+.status-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #818384;
+  margin-bottom: 12px;
+  padding: 0 4px;
+}
+
+.grid-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.crossword-grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 2px;
+  background-color: #272729; /* Izgara çizgileri */
+  padding: 4px;
+  border: 2px solid #3a3a3c;
+  border-radius: 6px;
+  user-select: none;
+  width: 100%;
+  max-width: 380px;
+}
+
+/* Hücreler */
+.cell {
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: all 0.15s;
+  border-radius: 2px;
+}
+
+/* Gerçek Gazete Bulmacası: Hücrenin Sol Üstündeki Minik Numara */
+.cell-num {
+  position: absolute;
+  top: 1px;
+  left: 2px;
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: #a0a0a5;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.cell-char {
+  font-weight: 800;
+  font-size: 1.05rem;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+/* Harf Kutuları */
+.cell-letter {
+  background-color: #121213;
+  color: #ffffff;
+  cursor: pointer;
+  border: 1px solid #3a3a3c;
+}
+
+.cell-letter.active-row {
+  border-color: #818384;
+  background-color: #202022;
+}
+
+.cell-letter.active-clue-cell {
+  border-color: #ffffff;
+  box-shadow: inset 0 0 0 1px #ffffff;
+}
+
+.cell-letter.active-clue-cell .cell-num {
+  color: #ffffff;
+  font-weight: 900;
+}
+
+/* İpucu ile açılan harf */
+.cell-letter.hinted {
+  color: #ffd36e;
+  border-color: #b59f3b;
+  background-color: #1f1d17;
+  animation: popIn 0.25s ease;
+}
+
+/* Tam çözülen harf */
+.cell-letter.solved {
+  background-color: #538d4e;
+  border-color: #538d4e;
+  color: #ffffff;
+  animation: flipTile 0.35s ease;
+}
+
+.cell-letter.solved .cell-num {
+  color: #ffffff88;
+}
+
+/* Gazete Blokları (Kullanılmayan siyah kutular) */
+.cell-block {
+  background-color: #181819;
+  border: 1px solid #202022;
+}
+
+@keyframes popIn {
+  0% { transform: scale(0.6); }
+  100% { transform: scale(1); }
+}
+
+@keyframes flipTile {
+  0% { transform: rotateX(0deg); }
+  50% { transform: rotateX(90deg); }
+  100% { transform: rotateX(0deg); }
+}
+
+/* Aktif Soru Kartı */
+.active-question-card {
+  background-color: #1a1a1b;
+  border: 1px solid #3a3a3c;
+  border-radius: 6px;
+  padding: 14px;
+  width: 100%;
+  text-align: left;
+}
+
+.q-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.q-badge {
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #538d4e;
+  letter-spacing: 0.05rem;
+}
+
+.q-meta {
+  font-size: 0.75rem;
+  color: #818384;
+  font-weight: 600;
+}
+
+.q-def {
+  font-size: 0.95rem;
+  line-height: 1.45;
+  color: #d7dadc;
+  margin-bottom: 14px;
+}
+
+.input-row {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+}
+
+.wordle-input {
+  flex: 1;
+  height: 46px;
+  text-align: center;
+  font-family: inherit;
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #ffffff;
+  background-color: #121213;
+  border: 2px solid #3a3a3c;
+  border-radius: 4px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.wordle-input:focus {
+  border-color: #818384;
+}
+
+.wordle-input.big {
+  font-size: 1.3rem;
+  height: 52px;
+  letter-spacing: 0.15rem;
+  max-width: 320px;
+}
+
+.wordle-input::placeholder {
+  text-transform: none;
+  font-size: 0.88rem;
+  font-weight: 400;
+  color: #606062;
+}
+
+.shake {
+  animation: shake 0.4s;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+
+.feedback {
+  min-height: 22px;
+  margin-top: 10px;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.feedback.ok {
+  color: #538d4e;
+}
+
+.feedback.bad {
+  color: #e76f51;
+}
+
+.mini-order-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+  padding: 8px;
+  background-color: #121213;
+  border-radius: 4px;
+  border: 1px solid #3a3a3c;
+  font-size: 0.85rem;
+  color: #818384;
+}
+
+.mini-order-bar span b {
+  color: #538d4e;
+  font-size: 0.95rem;
+}
+
+/* 3. AŞAMA: FİNAL AKROSTİŞ */
+.lead-text {
+  font-size: 0.95rem;
+  color: #d7dadc;
+  line-height: 1.5;
+  margin-bottom: 18px;
+}
+
+.acrostic-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  width: 100%;
+  max-width: 360px;
+  margin: 0 auto 20px;
+}
+
+.acrostic-item {
+  display: flex;
+  align-items: center;
+  background-color: #1a1a1b;
+  border: 1px solid #3a3a3c;
+  border-radius: 4px;
+  padding: 6px 10px;
+  gap: 8px;
+  font-size: 0.9rem;
+}
+
+.acrostic-item .initial {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  background-color: #538d4e;
+  color: #ffffff;
+  border-radius: 3px;
+  font-weight: 800;
+  font-size: 0.95rem;
+}
+
+.acrostic-item .rest {
+  color: #818384;
+  font-weight: 600;
+}
+
+#final-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+/* 4. AŞAMA: OYNATICI */
+.player-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 30px 0;
+}
+
+.vinyl-box {
+  margin: 10px 0;
+}
+
+.vinyl {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background-color: #1a1a1b;
+  border: 3px solid #3a3a3c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.vinyl.spin {
+  animation: spin 3.5s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.vinyl-center {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background-color: #538d4e;
+}
+
+.song-meta {
+  text-align: center;
+}
+
+.song-title {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 4px;
+}
+
+.song-artist {
+  font-size: 1.05rem;
+  color: #818384;
+  font-weight: 600;
+}
+
+.song-note {
+  font-size: 0.95rem;
+  color: #818384;
+}
+
+.player-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  max-width: 260px;
+}
+
+.ext-link {
+  font-size: 0.85rem;
+  color: #818384;
+  text-decoration: underline;
+  margin-top: 10px;
+}
+
+#confetti {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 99;
+  width: 100%;
+  height: 100%;
+}
+
+@media (max-width: 440px) {
+  .cell-char {
+    font-size: 0.9rem;
+  }
+  .cell-num {
+    font-size: 0.6rem;
+  }
+}
