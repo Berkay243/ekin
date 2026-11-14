@@ -1,139 +1,171 @@
 /* =========================================================
-   ASLA ÇAKIŞMAYAN, TERTEMİZ KELİMELİK / BULMACA HARİTASI
+   GRİPİN - SOR BANA SOR | ÇAPRAZ BULMACA HARİTASI
    
-   Her kelime kendi satırında/sütununda tamamen BAĞIMSIZDIR.
-   Asla birbirine değmez, bitişmez, harf ezmez!
+   Tek parça bağlantılı (Yatay + Dikey), çakışma ve istenmeyen
+   komşuluk barındırmayan 13x9 gazete çapraz bulmacası.
    
-   SANDIĞIM Kelimeleri:
-   1: S -> SEVGİ    (5 harf, Yatay) : Row 0, Col 0..4
-   2: A -> ANLATI   (6 harf, Yatay) : Row 2, Col 0..5
-   3: N -> NOSTALJİ (8 harf, Yatay) : Row 4, Col 0..7
-   4: D -> DOĞA     (4 harf, Yatay) : Row 6, Col 0..3 (İçindeki Ğ harfi 6. harftir)
-   5: I -> IŞILTI   (6 harf, Yatay) : Row 8, Col 0..5
-   6: Ğ -> (DOĞA kelimesinin 3. kutusundaki 'Ğ' harfi üzerinde minik '6' yazar, soru yok)
-   7: I -> ILIK     (4 harf, Yatay) : Row 10, Col 0..3
-   8: M -> MELODİ   (6 harf, Yatay) : Row 12, Col 0..5
-   
-   Grid Boyutu: 13 Satır x 8 Sütun
+   Baş Harfler: S - O - R - B - A - N - A - S - O - R (SOR BANA SOR)
    ========================================================= */
 
 const ROWS = 13;
-const COLS = 8;
+const COLS = 9;
 
 const WORDS_MAP = [
   {
     id: 1,
     letter: "S",
-    word: "SEVGİ",
+    word: "SABIR",
     direction: "across",
-    definition: "İnsanı bir şeye veya bir kimseye karşı yakın ilgi ve bağlılık göstermeye yönelten yüce duygu; muhabbet.",
-    hint: "5 harfli. Kalpten gelen en saf duygu.",
+    definition: "Acı, yoksulluk, haksızlık vb. üzücü durumlar karşısında ses çıkarmadan onların geçmesini bekleme erdemi; tahammül.",
+    hint: "5 harfli. Zor zamanlarda dayanma gücü.",
     cells: [
-      { r: 0, c: 0, ch: "S" },
-      { r: 0, c: 1, ch: "E" },
-      { r: 0, c: 2, ch: "V" },
-      { r: 0, c: 3, ch: "G" },
-      { r: 0, c: 4, ch: "İ" }
+      { r: 1, c: 0, ch: "S" },
+      { r: 1, c: 1, ch: "A" },
+      { r: 1, c: 2, ch: "B" },
+      { r: 1, c: 3, ch: "I" },
+      { r: 1, c: 4, ch: "R" }
     ]
   },
   {
     id: 2,
+    letter: "O",
+    word: "ORMAN",
+    direction: "down",
+    definition: "Ağaçlarla örtülü geniş alan; çeşitli ağaçların, çalıların ve canlıların bir arada bulunduğu doğal yaşam alanı.",
+    hint: "5 harfli. Yeşil ağaçlarla kaplı geniş alan.",
+    cells: [
+      { r: 0, c: 4, ch: "O" },
+      { r: 1, c: 4, ch: "R" },
+      { r: 2, c: 4, ch: "M" },
+      { r: 3, c: 4, ch: "A" },
+      { r: 4, c: 4, ch: "N" }
+    ]
+  },
+  {
+    id: 3,
+    letter: "R",
+    word: "RADYO",
+    direction: "across",
+    definition: "Elektromanyetik dalgalarla ses yayınlarını uzaktan alıp dinlemeye yarayan cihaz; yayın kuruluşu.",
+    hint: "5 harfli. Frekans ayarlayıp şarkı dinlenen cihaz.",
+    cells: [
+      { r: 3, c: 3, ch: "R" },
+      { r: 3, c: 4, ch: "A" },
+      { r: 3, c: 5, ch: "D" },
+      { r: 3, c: 6, ch: "Y" },
+      { r: 3, c: 7, ch: "O" }
+    ]
+  },
+  {
+    id: 4,
+    letter: "B",
+    word: "BOYUT",
+    direction: "down",
+    definition: "Uzunluk, genişlik ve derinlikten her biri; bir durumun veya kavramın kapsamı, ölçüsü.",
+    hint: "5 harfli. En, boy veya derinlik ölçüsü.",
+    cells: [
+      { r: 2, c: 7, ch: "B" },
+      { r: 3, c: 7, ch: "O" },
+      { r: 4, c: 7, ch: "Y" },
+      { r: 5, c: 7, ch: "U" },
+      { r: 6, c: 7, ch: "T" }
+    ]
+  },
+  {
+    id: 5,
     letter: "A",
     word: "ANLATI",
     direction: "across",
     definition: "Bir olayın, durumun ya da duygunun söz veya yazıyla hikâye edilerek dile getirilmesi biçimi.",
     hint: "6 harfli. Roman veya hikâyelerin aktarılış tarzı.",
     cells: [
-      { r: 2, c: 0, ch: "A" },
-      { r: 2, c: 1, ch: "N" },
-      { r: 2, c: 2, ch: "L" },
-      { r: 2, c: 3, ch: "A" },
-      { r: 2, c: 4, ch: "T" },
-      { r: 2, c: 5, ch: "I" }
+      { r: 6, c: 3, ch: "A" },
+      { r: 6, c: 4, ch: "N" },
+      { r: 6, c: 5, ch: "L" },
+      { r: 6, c: 6, ch: "A" },
+      { r: 6, c: 7, ch: "T" },
+      { r: 6, c: 8, ch: "I" }
     ]
   },
   {
-    id: 3,
+    id: 6,
     letter: "N",
-    word: "NOSTALJİ",
-    direction: "across",
-    definition: "Geçmişte kalan güzel günlere, yaşantılara veya mekânlara karşı duyulan tatlı ve özlem dolu duygu.",
-    hint: "8 harfli. Geçmişe duyulan hasret.",
+    word: "NİSAN",
+    direction: "down",
+    definition: "Yılın dördüncü, ilkbahar mevsiminin ise ikinci ayı; baharın yağmurlarıyla bilinen ayı.",
+    hint: "5 harfli. Mart ile Mayıs arasındaki bahar ayı.",
     cells: [
-      { r: 4, c: 0, ch: "N" },
-      { r: 4, c: 1, ch: "O" },
-      { r: 4, c: 2, ch: "S" },
-      { r: 4, c: 3, ch: "T" },
-      { r: 4, c: 4, ch: "A" },
-      { r: 4, c: 5, ch: "L" },
-      { r: 4, c: 6, ch: "J" },
-      { r: 4, c: 7, ch: "İ" }
+      { r: 6, c: 4, ch: "N" },
+      { r: 7, c: 4, ch: "İ" },
+      { r: 8, c: 4, ch: "S" },
+      { r: 9, c: 4, ch: "A" },
+      { r: 10, c: 4, ch: "N" }
     ]
   },
-  {
-    id: 4,
-    letter: "D",
-    word: "DOĞA",
-    direction: "across",
-    definition: "Kendi kuralları çerçevesinde sürekli gelişen, canlı ve cansız varlıkların tümü; tabiat.",
-    hint: "4 harfli. Yeşili, dağları, ırmakları barındıran tabiat.",
-    cells: [
-      { r: 6, c: 0, ch: "D" },
-      { r: 6, c: 1, ch: "O" },
-      { r: 6, c: 2, ch: "Ğ" }, // 6. Harf 'Ğ' (Üzerinde 6 yazar)
-      { r: 6, c: 3, ch: "A" }
-    ]
-  },
-  {
-    id: 5,
-    letter: "I",
-    word: "IŞILTI",
-    direction: "across",
-    definition: "Göz alıcı, pırıl pırıl parıldayan ışık dalgası; etrafa saçılan canlı parlaklık.",
-    hint: "6 harfli, noktasız 'I' ile başlar. Yıldızların parıldaması.",
-    cells: [
-      { r: 8, c: 0, ch: "I" },
-      { r: 8, c: 1, ch: "Ş" },
-      { r: 8, c: 2, ch: "I" },
-      { r: 8, c: 3, ch: "L" },
-      { r: 8, c: 4, ch: "T" },
-      { r: 8, c: 5, ch: "I" }
-    ]
-  },
-  // 6 için bağımsız soru yok, DOĞA'nın içindedir.
   {
     id: 7,
-    letter: "I",
-    word: "ILIK",
+    letter: "A",
+    word: "ADRES",
     direction: "across",
-    definition: "Ne sıcak ne de soğuk olan, ikisinin ortasında, insana tatlı bir ferahlık ve dinginlik veren.",
-    hint: "4 harfli, noktasız 'I' ile başlar. Sıcak ile soğuk arası.",
+    definition: "Bir kimsenin oturduğu veya bir kuruluşun bulunduğu yerin cadde, sokak ve numara olarak tarifi.",
+    hint: "5 harfli. Mektup veya kargo gönderirken yazılan konum.",
     cells: [
-      { r: 10, c: 0, ch: "I" },
-      { r: 10, c: 1, ch: "L" },
-      { r: 10, c: 2, ch: "I" },
-      { r: 10, c: 3, ch: "K" }
+      { r: 8, c: 0, ch: "A" },
+      { r: 8, c: 1, ch: "D" },
+      { r: 8, c: 2, ch: "R" },
+      { r: 8, c: 3, ch: "E" },
+      { r: 8, c: 4, ch: "S" }
     ]
   },
   {
     id: 8,
-    letter: "M",
-    word: "MELODİ",
-    direction: "across",
-    definition: "Belli bir duygu ve ahenk uyandıracak biçimde düzenlenmiş sesler dizisi; ezgi, nağme.",
-    hint: "6 harfli. Şarkıların kulakta kalan tatlı ezgisi.",
+    letter: "S",
+    word: "SEVDA",
+    direction: "down",
+    definition: "Güçlü ve derin sevgi, gönülden bağlılık, aşk; eski şarkılarda sıkça geçen tutku kelimesi.",
+    hint: "5 harfli. Aşk ve gönül bağı anlamındaki sözcük.",
     cells: [
-      { r: 12, c: 0, ch: "M" },
-      { r: 12, c: 1, ch: "E" },
-      { r: 12, c: 2, ch: "L" },
-      { r: 12, c: 3, ch: "O" },
-      { r: 12, c: 4, ch: "D" },
-      { r: 12, c: 5, ch: "İ" }
+      { r: 5, c: 1, ch: "S" },
+      { r: 6, c: 1, ch: "E" },
+      { r: 7, c: 1, ch: "V" },
+      { r: 8, c: 1, ch: "D" },
+      { r: 9, c: 1, ch: "A" }
+    ]
+  },
+  {
+    id: 9,
+    letter: "O",
+    word: "ONARIM",
+    direction: "across",
+    definition: "Bozulmuş, yıpranmış veya hasar görmüş bir şeyi yeniden çalışır ve sağlam duruma getirme işi; tamir.",
+    hint: "6 harfli. Tamir, bakım ve yenileme çalışması.",
+    cells: [
+      { r: 10, c: 3, ch: "O" },
+      { r: 10, c: 4, ch: "N" },
+      { r: 10, c: 5, ch: "A" },
+      { r: 10, c: 6, ch: "R" },
+      { r: 10, c: 7, ch: "I" },
+      { r: 10, c: 8, ch: "M" }
+    ]
+  },
+  {
+    id: 10,
+    letter: "R",
+    word: "ROMAN",
+    direction: "down",
+    definition: "İnsanın ya da çevrenin karakterlerini, duygularını ve başından geçen olayları geniş kapsamla anlatan uzun edebi eser.",
+    hint: "5 harfli. Öyküden uzun, bölümlerden oluşan kitap türü.",
+    cells: [
+      { r: 8, c: 8, ch: "R" },
+      { r: 9, c: 8, ch: "O" },
+      { r: 10, c: 8, ch: "M" },
+      { r: 11, c: 8, ch: "A" },
+      { r: 12, c: 8, ch: "N" }
     ]
   }
 ];
 
-const TARGET_SONG = "SANDIĞIM";
+const TARGET_SONG = "SORBANASOR";
 
 /* =========================================================
    ELEMENTLER & DURUM
@@ -148,6 +180,7 @@ const btnWordHint = $("btn-word-hint");
 let activeWordId = 1;
 let solvedWordsMap = {};    // id -> true
 let cellRevealed = {};      // "r,c" -> char
+let finalStepShown = false;
 let audioUnlocked = false;
 let isPlaying = false;
 
@@ -165,7 +198,7 @@ function showScreen(screenId) {
 }
 
 /* =========================================================
-   HARİTAYI OLUŞTURMA
+   HARİTAYI OLUŞTURMA (KESİŞİMLİ ÇAPRAZ BULMACA)
    ========================================================= */
 function initGrid() {
   gridEl.innerHTML = "";
@@ -174,21 +207,20 @@ function initGrid() {
 
   WORDS_MAP.forEach(wordData => {
     wordData.cells.forEach((cell, idx) => {
-      let clueNum = (idx === 0) ? wordData.id : null;
+      const existing = gridCells[cell.r][cell.c];
+      const wordIds = existing ? existing.wordIds : [];
+      if (!wordIds.includes(wordData.id)) wordIds.push(wordData.id);
+
+      const clueNum = (idx === 0) ? wordData.id : (existing ? existing.clueNum : null);
 
       gridCells[cell.r][cell.c] = {
         type: "letter",
-        wordId: wordData.id,
+        wordIds: wordIds,
         targetChar: cell.ch,
         clueNum: clueNum
       };
     });
   });
-
-  // DOĞA kelimesinin 3. harfi olan 'Ğ' hücresine (Row 6, Col 2) minik '6' numarasını koyuyoruz
-  if (gridCells[6][2]) {
-    gridCells[6][2].clueNum = 6;
-  }
 
   // HTML Gridini İnşa Et
   for (let r = 0; r < ROWS; r++) {
@@ -203,7 +235,7 @@ function initGrid() {
         cellEl.classList.add("cell-block");
       } else {
         cellEl.classList.add("cell-letter");
-        cellEl.dataset.wordId = data.wordId;
+        cellEl.dataset.wordIds = data.wordIds.join(",");
         cellEl.dataset.targetChar = data.targetChar;
 
         // Minik köşe numarası
@@ -219,10 +251,14 @@ function initGrid() {
         cellEl.appendChild(charSpan);
 
         cellEl.addEventListener("click", () => {
-          if (data.clueNum === 6) {
-            selectWord(4);
+          if (data.clueNum && activeWordId !== data.clueNum) {
+            selectWord(data.clueNum);
+          } else if (data.wordIds.length > 1) {
+            const currentIdx = data.wordIds.indexOf(activeWordId);
+            const nextIdx = (currentIdx + 1) % data.wordIds.length;
+            selectWord(data.wordIds[nextIdx]);
           } else {
-            selectWord(data.wordId);
+            selectWord(data.wordIds[0]);
           }
         });
       }
@@ -231,6 +267,7 @@ function initGrid() {
     }
   }
 
+  updateProgress();
   btnWordHint.classList.remove("hidden");
   selectWord(1);
 }
@@ -239,7 +276,7 @@ function initGrid() {
    SORU SEÇME
    ========================================================= */
 function selectWord(wordId) {
-  if (wordId === 6) wordId = 4;
+  if (finalStepShown) return;
 
   activeWordId = wordId;
   const wordData = WORDS_MAP.find(w => w.id === wordId);
@@ -247,7 +284,7 @@ function selectWord(wordId) {
 
   document.querySelectorAll(".cell").forEach(c => {
     c.classList.remove("active-row", "active-clue-cell");
-    if (c.dataset.wordId == wordId) {
+    if (c.dataset.wordIds && c.dataset.wordIds.split(",").includes(String(wordId))) {
       c.classList.add("active-row");
     }
   });
@@ -256,8 +293,9 @@ function selectWord(wordId) {
   const firstEl = gridEl.querySelector(`.cell[data-row="${firstCell.r}"][data-col="${firstCell.c}"]`);
   if (firstEl) firstEl.classList.add("active-clue-cell");
 
+  const dirText = wordData.direction === "across" ? "Yatay" : "Dikey";
   $("q-badge").textContent = `${wordData.id}. Soru`;
-  $("q-meta").textContent = `${wordData.word.length} Harf`;
+  $("q-meta").textContent = `${dirText} · ${wordData.word.length} Harf`;
   $("q-def").textContent = `“${wordData.definition}”`;
 
   feedbackWord.textContent = "";
@@ -312,7 +350,13 @@ btnWordHint.addEventListener("click", () => {
     feedbackWord.textContent = `💡 Haritaya bir harf yerleştirildi: '${targetCell.ch}'`;
     feedbackWord.className = "feedback ok";
 
-    checkWordFullyRevealed(wordData);
+    checkAllWordsSolvedStatus();
+
+    if (isAllSolved()) {
+      setTimeout(showFinalStepInPanel, 700);
+    } else if (solvedWordsMap[activeWordId]) {
+      setTimeout(moveToNextUnsolved, 700);
+    }
   } else {
     feedbackWord.textContent = "Bu kelimedeki harfler zaten açılmış durumda!";
     feedbackWord.className = "feedback ok";
@@ -331,19 +375,26 @@ function revealSingleCell(r, c, char) {
   }
 }
 
-function checkWordFullyRevealed(wordData) {
-  const allRevealed = wordData.cells.every(c => Boolean(cellRevealed[`${c.r},${c.c}`]));
-  if (allRevealed && !solvedWordsMap[wordData.id]) {
-    solvedWordsMap[wordData.id] = true;
-    markWordSolved(wordData);
-    updateProgress();
-  }
+/* Kesişimlerle tüm harfleri açılan kelimeleri otomatik tamamla */
+function checkAllWordsSolvedStatus() {
+  WORDS_MAP.forEach(w => {
+    const allRevealed = w.cells.every(c => Boolean(cellRevealed[`${c.r},${c.c}`]));
+    if (allRevealed && !solvedWordsMap[w.id]) {
+      solvedWordsMap[w.id] = true;
+      paintWordAsSolved(w);
+    }
+  });
+  updateProgress();
+}
+
+function isAllSolved() {
+  return WORDS_MAP.every(w => Boolean(solvedWordsMap[w.id]));
 }
 
 /* =========================================================
    KELİMEYİ HARİTAYA TAM YERLEŞTİRME
    ========================================================= */
-function markWordSolved(wordData) {
+function paintWordAsSolved(wordData) {
   wordData.cells.forEach(c => {
     cellRevealed[`${c.r},${c.c}`] = c.ch;
     const cellEl = gridEl.querySelector(`.cell[data-row="${c.r}"][data-col="${c.c}"]`);
@@ -354,6 +405,12 @@ function markWordSolved(wordData) {
       cellEl.classList.add("solved");
     }
   });
+}
+
+function markWordSolved(wordData) {
+  solvedWordsMap[wordData.id] = true;
+  paintWordAsSolved(wordData);
+  checkAllWordsSolvedStatus();
 }
 
 /* =========================================================
@@ -380,14 +437,9 @@ $("solve-form").addEventListener("submit", (e) => {
     feedbackWord.textContent = "Doğru! Haritaya yerleştirildi. ✅";
     feedbackWord.className = "feedback ok";
 
-    solvedWordsMap[wordData.id] = true;
     markWordSolved(wordData);
-    updateProgress();
 
-    const requiredIds = [1, 2, 3, 4, 5, 7, 8];
-    const allDone = requiredIds.every(id => Boolean(solvedWordsMap[id]));
-
-    if (allDone) {
+    if (isAllSolved()) {
       setTimeout(showFinalStepInPanel, 700);
     } else {
       setTimeout(moveToNextUnsolved, 700);
@@ -400,14 +452,13 @@ $("solve-form").addEventListener("submit", (e) => {
 });
 
 function moveToNextUnsolved() {
-  const requiredIds = [1, 2, 3, 4, 5, 7, 8];
-  const nextId = requiredIds.find(id => !solvedWordsMap[id]);
-  if (nextId) selectWord(nextId);
+  const nextWord = WORDS_MAP.find(w => !solvedWordsMap[w.id]);
+  if (nextWord) selectWord(nextWord.id);
 }
 
 function updateProgress() {
   const count = Object.keys(solvedWordsMap).length;
-  $("progress-text").textContent = `${count} / 7 Kelime Çözüldü`;
+  $("progress-text").textContent = `${count} / ${WORDS_MAP.length} Kelime Çözüldü`;
 }
 
 function shakeElement(el) {
@@ -421,6 +472,9 @@ function shakeElement(el) {
    KOPYA VERME YOK, BUTONDA SADECE "Onayla" YAZIYOR!
    ========================================================= */
 function showFinalStepInPanel() {
+  if (finalStepShown) return;
+  finalStepShown = true;
+
   const card = $("question-card");
   card.innerHTML = `
     <div class="q-header">
@@ -428,7 +482,7 @@ function showFinalStepInPanel() {
       <span class="q-meta">Son Adım</span>
     </div>
     <p class="q-def" style="color: #ffffff; font-weight: 600;">
-      Haritada çözdüğün kelimelerin <b>numaralarındaki harfleri sırayla</b> birleştir:
+      Haritada çözdüğün kelimelerin <b>baş harflerini sırayla (1'den 10'a)</b> birleştirerek gizli şarkının adını yaz:
     </p>
 
     <form id="panel-final-form" autocomplete="off" style="margin-top: 14px;">
@@ -438,7 +492,7 @@ function showFinalStepInPanel() {
           class="wordle-input"
           type="text"
           placeholder="Cevabını yaz..."
-          maxlength="14"
+          maxlength="20"
           autocomplete="off"
           autocorrect="off"
           spellcheck="false"
@@ -468,7 +522,7 @@ function showFinalStepInPanel() {
         launchConfetti();
       }, 600);
     } else {
-      fb.textContent = "Cevap doğru değil. Haritadaki kelimeleri inceleyip tekrar dene!";
+      fb.textContent = "Cevap doğru değil. Haritadaki kelimelerin baş harflerini sırayla inceleyip tekrar dene!";
       fb.className = "feedback bad";
       shakeElement(finalInput);
     }

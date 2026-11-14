@@ -31,7 +31,7 @@
       <section id="screen-game" class="screen">
         <!-- İlerleme Özeti -->
         <div class="status-bar">
-          <span id="progress-text">0 / 8 Kelime Çözüldü</span>
+          <span id="progress-text">0 / 10 Kelime Çözüldü</span>
         </div>
 
         <!-- Gazete Çentik / Kelimelik Izgarası -->
@@ -67,10 +67,10 @@
         </div>
       </section>
 
-      <!-- 3. BAŞ HARFLERİ BİRLEŞTİRME AŞAMASI (SANDIĞIM) -->
+      <!-- 3. BAŞ HARFLERİ BİRLEŞTİRME AŞAMASI (SOR BANA SOR) -->
       <section id="screen-final-puzzle" class="screen">
         <p class="lead-text">
-          Tüm kelimeleri çözdün! Şimdi bulduğun <b>8 kelimenin baş harfini sırasıyla</b> aşağıya yaz ve şarkıyı bul:
+          Tüm kelimeleri çözdün! Şimdi bulduğun <b>10 kelimenin baş harfini sırasıyla</b> aşağıya yaz ve şarkıyı bul:
         </p>
 
         <!-- Çözülen kelimelerin Wordle tarzı listesi -->
@@ -82,7 +82,7 @@
             class="wordle-input big"
             type="text"
             placeholder="Şarkı adını yaz..."
-            maxlength="12"
+            maxlength="20"
             autocomplete="off"
             autocorrect="off"
             spellcheck="false"
@@ -103,8 +103,8 @@
           </div>
 
           <div class="song-meta">
-            <h2 class="song-title">Sandığım</h2>
-            <p class="song-artist">Nilipek</p>
+            <h2 class="song-title">Sor Bana Sor</h2>
+            <p class="song-artist">Gripin</p>
           </div>
 
           <p class="song-note">Tebrikler! Bulmacayı tamamladın, şarkı çalıyor... 🎵</p>
@@ -116,7 +116,7 @@
 
           <div id="yt-wrap" class="yt-wrap hidden"><div id="yt-player"></div></div>
           <a id="ext-link" class="ext-link hidden" target="_blank" rel="noopener"
-             href="https://www.youtube.com/results?search_query=Nilipek+Sand%C4%B1%C4%9F%C4%B1m">
+             href="https://www.youtube.com/results?search_query=Gripin+Sor+Bana+Sor">
             YouTube'da Aç ↗
           </a>
         </div>
@@ -124,8 +124,10 @@
     </main>
   </div>
 
-  <!-- Şarkı dosyası: sandigim.mp3 -->
+  <!-- Şarkı dosyası: sorbanasor.mp3 / sor-bana-sor.mp3 -->
   <audio id="song" preload="auto" playsinline webkit-playsinline loop>
+    <source src="sorbanasor.mp3" type="audio/mpeg" />
+    <source src="sor-bana-sor.mp3" type="audio/mpeg" />
     <source src="sandigim.mp3" type="audio/mpeg" />
     <source src="sandigim.m4a" type="audio/mp4" />
     <source src="sandigim.ogg" type="audio/ogg" />
