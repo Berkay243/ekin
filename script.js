@@ -1,171 +1,184 @@
 /* =========================================================
-   GRİPİN - SOR BANA SOR | ÇAPRAZ BULMACA HARİTASI
+   CRUSH - BENİM OLSANA | ÇAPRAZ BULMACA HARİTASI & ŞAKA AKIŞI
    
    Tek parça bağlantılı (Yatay + Dikey), çakışma ve istenmeyen
-   komşuluk barındırmayan 13x9 gazete çapraz bulmacası.
+   komşuluk barındırmayan 7x7 gazete çapraz bulmacası.
    
-   Baş Harfler: S - O - R - B - A - N - A - S - O - R (SOR BANA SOR)
+   Baş Harfler: B - E - N - İ - M (BENİM -> BENİM OLSANA)
    ========================================================= */
 
-const ROWS = 13;
-const COLS = 9;
+const ROWS = 7;
+const COLS = 7;
 
-const WORDS_MAP = [
-  {
-    id: 1,
-    letter: "S",
-    word: "SABIR",
-    direction: "across",
-    definition: "Acı, yoksulluk, haksızlık vb. üzücü durumlar karşısında ses çıkarmadan onların geçmesini bekleme erdemi; tahammül.",
-    hint: "5 harfli. Zor zamanlarda dayanma gücü.",
-    cells: [
-      { r: 1, c: 0, ch: "S" },
-      { r: 1, c: 1, ch: "A" },
-      { r: 1, c: 2, ch: "B" },
-      { r: 1, c: 3, ch: "I" },
-      { r: 1, c: 4, ch: "R" }
-    ]
-  },
-  {
-    id: 2,
-    letter: "O",
-    word: "ORMAN",
-    direction: "down",
-    definition: "Ağaçlarla örtülü geniş alan; çeşitli ağaçların, çalıların ve canlıların bir arada bulunduğu doğal yaşam alanı.",
-    hint: "5 harfli. Yeşil ağaçlarla kaplı geniş alan.",
-    cells: [
-      { r: 0, c: 4, ch: "O" },
-      { r: 1, c: 4, ch: "R" },
-      { r: 2, c: 4, ch: "M" },
-      { r: 3, c: 4, ch: "A" },
-      { r: 4, c: 4, ch: "N" }
-    ]
-  },
-  {
-    id: 3,
-    letter: "R",
-    word: "RADYO",
-    direction: "across",
-    definition: "Elektromanyetik dalgalarla ses yayınlarını uzaktan alıp dinlemeye yarayan cihaz; yayın kuruluşu.",
-    hint: "5 harfli. Frekans ayarlayıp şarkı dinlenen cihaz.",
-    cells: [
-      { r: 3, c: 3, ch: "R" },
-      { r: 3, c: 4, ch: "A" },
-      { r: 3, c: 5, ch: "D" },
-      { r: 3, c: 6, ch: "Y" },
-      { r: 3, c: 7, ch: "O" }
-    ]
-  },
-  {
-    id: 4,
-    letter: "B",
-    word: "BOYUT",
-    direction: "down",
-    definition: "Uzunluk, genişlik ve derinlikten her biri; bir durumun veya kavramın kapsamı, ölçüsü.",
-    hint: "5 harfli. En, boy veya derinlik ölçüsü.",
-    cells: [
-      { r: 2, c: 7, ch: "B" },
-      { r: 3, c: 7, ch: "O" },
-      { r: 4, c: 7, ch: "Y" },
-      { r: 5, c: 7, ch: "U" },
-      { r: 6, c: 7, ch: "T" }
-    ]
-  },
-  {
-    id: 5,
-    letter: "A",
-    word: "ANLATI",
-    direction: "across",
-    definition: "Bir olayın, durumun ya da duygunun söz veya yazıyla hikâye edilerek dile getirilmesi biçimi.",
-    hint: "6 harfli. Roman veya hikâyelerin aktarılış tarzı.",
-    cells: [
-      { r: 6, c: 3, ch: "A" },
-      { r: 6, c: 4, ch: "N" },
-      { r: 6, c: 5, ch: "L" },
-      { r: 6, c: 6, ch: "A" },
-      { r: 6, c: 7, ch: "T" },
-      { r: 6, c: 8, ch: "I" }
-    ]
-  },
-  {
-    id: 6,
-    letter: "N",
-    word: "NİSAN",
-    direction: "down",
-    definition: "Yılın dördüncü, ilkbahar mevsiminin ise ikinci ayı; baharın yağmurlarıyla bilinen ayı.",
-    hint: "5 harfli. Mart ile Mayıs arasındaki bahar ayı.",
-    cells: [
-      { r: 6, c: 4, ch: "N" },
-      { r: 7, c: 4, ch: "İ" },
-      { r: 8, c: 4, ch: "S" },
-      { r: 9, c: 4, ch: "A" },
-      { r: 10, c: 4, ch: "N" }
-    ]
-  },
-  {
-    id: 7,
-    letter: "A",
-    word: "ADRES",
-    direction: "across",
-    definition: "Bir kimsenin oturduğu veya bir kuruluşun bulunduğu yerin cadde, sokak ve numara olarak tarifi.",
-    hint: "5 harfli. Mektup veya kargo gönderirken yazılan konum.",
-    cells: [
-      { r: 8, c: 0, ch: "A" },
-      { r: 8, c: 1, ch: "D" },
-      { r: 8, c: 2, ch: "R" },
-      { r: 8, c: 3, ch: "E" },
-      { r: 8, c: 4, ch: "S" }
-    ]
-  },
-  {
-    id: 8,
-    letter: "S",
-    word: "SEVDA",
-    direction: "down",
-    definition: "Güçlü ve derin sevgi, gönülden bağlılık, aşk; eski şarkılarda sıkça geçen tutku kelimesi.",
-    hint: "5 harfli. Aşk ve gönül bağı anlamındaki sözcük.",
-    cells: [
-      { r: 5, c: 1, ch: "S" },
-      { r: 6, c: 1, ch: "E" },
-      { r: 7, c: 1, ch: "V" },
-      { r: 8, c: 1, ch: "D" },
-      { r: 9, c: 1, ch: "A" }
-    ]
-  },
-  {
-    id: 9,
-    letter: "O",
-    word: "ONARIM",
-    direction: "across",
-    definition: "Bozulmuş, yıpranmış veya hasar görmüş bir şeyi yeniden çalışır ve sağlam duruma getirme işi; tamir.",
-    hint: "6 harfli. Tamir, bakım ve yenileme çalışması.",
-    cells: [
-      { r: 10, c: 3, ch: "O" },
-      { r: 10, c: 4, ch: "N" },
-      { r: 10, c: 5, ch: "A" },
-      { r: 10, c: 6, ch: "R" },
-      { r: 10, c: 7, ch: "I" },
-      { r: 10, c: 8, ch: "M" }
-    ]
-  },
-  {
-    id: 10,
-    letter: "R",
-    word: "ROMAN",
-    direction: "down",
-    definition: "İnsanın ya da çevrenin karakterlerini, duygularını ve başından geçen olayları geniş kapsamla anlatan uzun edebi eser.",
-    hint: "5 harfli. Öyküden uzun, bölümlerden oluşan kitap türü.",
-    cells: [
-      { r: 8, c: 8, ch: "R" },
-      { r: 9, c: 8, ch: "O" },
-      { r: 10, c: 8, ch: "M" },
-      { r: 11, c: 8, ch: "A" },
-      { r: 12, c: 8, ch: "N" }
-    ]
-  }
+const WORD_SETS = [
+  [
+    {
+      id: 1,
+      letter: "B",
+      word: "BESTE",
+      direction: "across",
+      escapeCellIndex: 2, // 'S' (1,2) - kesişim dışı
+      definition: "Bir müzik parçasını oluşturan ezgilerin bütünü; bir şairin dizeleri üzerine kurulan müzik eseri.",
+      hint: "5 harfli. Şarkı sözlerinin buluştuğu melodi eseri.",
+      cells: [
+        { r: 1, c: 0, ch: "B" },
+        { r: 1, c: 1, ch: "E" },
+        { r: 1, c: 2, ch: "S" },
+        { r: 1, c: 3, ch: "T" },
+        { r: 1, c: 4, ch: "E" }
+      ]
+    },
+    {
+      id: 2,
+      letter: "E",
+      word: "ETKEN",
+      direction: "down",
+      escapeCellIndex: 2, // 'K' (2,3) - kesişim dışı
+      definition: "Bir etki veya sonuca yol açan sebep, unsur; faktör.",
+      hint: "5 harfli. Bir sonucu doğuran temel unsur, faktör.",
+      cells: [
+        { r: 0, c: 3, ch: "E" },
+        { r: 1, c: 3, ch: "T" },
+        { r: 2, c: 3, ch: "K" },
+        { r: 3, c: 3, ch: "E" },
+        { r: 4, c: 3, ch: "N" }
+      ]
+    },
+    {
+      id: 3,
+      letter: "N",
+      word: "NEFES",
+      direction: "across",
+      escapeCellIndex: 2, // 'F' (3,4) - kesişim dışı
+      definition: "Canlıların yaşamak için ciğerlerine çekip dışarı verdiği hava; soluk.",
+      hint: "5 harfli. Alıp verdiğimiz hayat soluğu.",
+      cells: [
+        { r: 3, c: 2, ch: "N" },
+        { r: 3, c: 3, ch: "E" },
+        { r: 3, c: 4, ch: "F" },
+        { r: 3, c: 5, ch: "E" },
+        { r: 3, c: 6, ch: "S" }
+      ]
+    },
+    {
+      id: 4,
+      letter: "İ",
+      word: "İSTEK",
+      direction: "down",
+      escapeCellIndex: 2, // 'T' (4,6) - kesişim dışı
+      definition: "Bir şeye karşı duyulan içsel yönelim, arzu; bir şeyin olmasını gönülden dileme.",
+      hint: "5 harfli. Arzu, talep veya dilek.",
+      cells: [
+        { r: 2, c: 6, ch: "İ" },
+        { r: 3, c: 6, ch: "S" },
+        { r: 4, c: 6, ch: "T" },
+        { r: 5, c: 6, ch: "E" },
+        { r: 6, c: 6, ch: "K" }
+      ]
+    },
+    {
+      id: 5,
+      letter: "M",
+      word: "MÜZİK",
+      direction: "across",
+      definition: "Seslerin belirli bir ahenk, ritim ve melodi içinde düzenlenmesi sanatı; musiki.",
+      hint: "5 harfli. Notaların ve şarkıların sanatı.",
+      cells: [
+        { r: 6, c: 2, ch: "M" },
+        { r: 6, c: 3, ch: "Ü" },
+        { r: 6, c: 4, ch: "Z" },
+        { r: 6, c: 5, ch: "İ" },
+        { r: 6, c: 6, ch: "K" }
+      ]
+    }
+  ],
+  [
+    {
+      id: 1,
+      letter: "B",
+      word: "BAKIŞ",
+      direction: "across",
+      escapeCellIndex: 3, // 'I' (1,3) - kesişim dışı
+      definition: "Gözlerin bir şeye çevrilmesiyle oluşan anlamlı ifade; nazar.",
+      hint: "5 harfli. Gözle süzme veya yöneltilen ilk dikkat.",
+      cells: [
+        { r: 1, c: 0, ch: "B" },
+        { r: 1, c: 1, ch: "A" },
+        { r: 1, c: 2, ch: "K" },
+        { r: 1, c: 3, ch: "I" },
+        { r: 1, c: 4, ch: "Ş" }
+      ]
+    },
+    {
+      id: 2,
+      letter: "E",
+      word: "EKİN",
+      direction: "down",
+      escapeCellIndex: 2, // 'İ' (2,2) - kesişim dışı
+      definition: "Tarlaya atılan tohumun filizlenip boy vermiş hali; bir toplumun kültür ve uygarlık birikimi.",
+      hint: "4 harfli. Tahılın tarladaki yeşil hali veya kültür.",
+      cells: [
+        { r: 0, c: 2, ch: "E" },
+        { r: 1, c: 2, ch: "K" },
+        { r: 2, c: 2, ch: "İ" },
+        { r: 3, c: 2, ch: "N" }
+      ]
+    },
+    {
+      id: 3,
+      letter: "N",
+      word: "NEHİR",
+      direction: "across",
+      escapeCellIndex: 2, // 'H' (3,4) - kesişim dışı
+      definition: "Yatak boyunca sürekli akarak denize veya göle ulaşan büyük akarsu; ırmak.",
+      hint: "5 harfli. Deniz veya göle dökülen büyük su yolu.",
+      cells: [
+        { r: 3, c: 2, ch: "N" },
+        { r: 3, c: 3, ch: "E" },
+        { r: 3, c: 4, ch: "H" },
+        { r: 3, c: 5, ch: "İ" },
+        { r: 3, c: 6, ch: "R" }
+      ]
+    },
+    {
+      id: 4,
+      letter: "İ",
+      word: "İRADE",
+      direction: "down",
+      escapeCellIndex: 2, // 'A' (4,6) - kesişim dışı
+      definition: "Bir şeyi yapıp yapmamaya özgürce karar verme ve bunu gerçekleştirme gücü; istenç.",
+      hint: "5 harfli. Karar verme ve uygulama gücü; istenç.",
+      cells: [
+        { r: 2, c: 6, ch: "İ" },
+        { r: 3, c: 6, ch: "R" },
+        { r: 4, c: 6, ch: "A" },
+        { r: 5, c: 6, ch: "D" },
+        { r: 6, c: 6, ch: "E" }
+      ]
+    },
+    {
+      id: 5,
+      letter: "M",
+      word: "MÜJDE",
+      direction: "across",
+      definition: "Duyulduğunda kişiyi mutlu eden sevinçli haber; muştu.",
+      hint: "5 harfli. Beklenen güzel ve sevinçli haber; muştu.",
+      cells: [
+        { r: 6, c: 2, ch: "M" },
+        { r: 6, c: 3, ch: "Ü" },
+        { r: 6, c: 4, ch: "J" },
+        { r: 6, c: 5, ch: "D" },
+        { r: 6, c: 6, ch: "E" }
+      ]
+    }
+  ]
 ];
 
-const TARGET_SONG = "SORBANASOR";
+let currentSetIndex = 0;
+let WORDS_MAP = WORD_SETS[currentSetIndex];
+
+const INITIAL_TARGET = "BENİM";
+const FINAL_TARGET = "BENİMOLSANA";
 
 /* =========================================================
    ELEMENTLER & DURUM
@@ -184,6 +197,14 @@ let finalStepShown = false;
 let audioUnlocked = false;
 let isPlaying = false;
 
+// Kaçan harf & dalga sıfırlama durumu
+let escapedTriggered = { 1: false, 2: false, 3: false, 4: false };
+let escapedCells = new Set();     // "r,c" kaçmış boş yuvalar
+let activeRunaways = new Map();   // key "r,c" -> runaway nesnesi
+let returnedEscapeCount = 0;
+let isWaveResetting = false;
+let runawayRafId = null;
+
 /* =========================================================
    YARDIMCI FONKSİYONLAR
    ========================================================= */
@@ -197,10 +218,33 @@ function showScreen(screenId) {
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
+function setGameControlsDisabled(disabled) {
+  solveInput.disabled = disabled;
+  btnWordHint.disabled = disabled;
+  const submitBtn = document.querySelector("#solve-form button[type='submit']");
+  if (submitBtn) submitBtn.disabled = disabled;
+}
+
 /* =========================================================
    HARİTAYI OLUŞTURMA (KESİŞİMLİ ÇAPRAZ BULMACA)
    ========================================================= */
-function initGrid() {
+function initGrid(customFeedback = null) {
+  if (runawayRafId) {
+    cancelAnimationFrame(runawayRafId);
+    runawayRafId = null;
+  }
+  document.querySelectorAll(".runaway-letter, .wave-flee-tile").forEach(el => el.remove());
+
+  activeRunaways.clear();
+  escapedCells.clear();
+  escapedTriggered = { 1: false, 2: false, 3: false, 4: false };
+  returnedEscapeCount = 0;
+  solvedWordsMap = {};
+  cellRevealed = {};
+  finalStepShown = false;
+  isWaveResetting = false;
+  setGameControlsDisabled(false);
+
   gridEl.innerHTML = "";
 
   const gridCells = Array.from({ length: ROWS }, () => Array(COLS).fill(null));
@@ -269,14 +313,18 @@ function initGrid() {
 
   updateProgress();
   btnWordHint.classList.remove("hidden");
-  selectWord(1);
+  selectWord(1, Boolean(customFeedback));
+  if (customFeedback) {
+    feedbackWord.textContent = customFeedback;
+    feedbackWord.className = "feedback warn";
+  }
 }
 
 /* =========================================================
    SORU SEÇME
    ========================================================= */
-function selectWord(wordId) {
-  if (finalStepShown) return;
+function selectWord(wordId, preserveFeedback = false) {
+  if (finalStepShown || isWaveResetting) return;
 
   activeWordId = wordId;
   const wordData = WORDS_MAP.find(w => w.id === wordId);
@@ -298,15 +346,23 @@ function selectWord(wordId) {
   $("q-meta").textContent = `${dirText} · ${wordData.word.length} Harf`;
   $("q-def").textContent = `“${wordData.definition}”`;
 
-  feedbackWord.textContent = "";
-  feedbackWord.className = "feedback";
+  if (!preserveFeedback) {
+    if (solvedWordsMap[wordId]) {
+      feedbackWord.textContent = `Bu kelime çözüldü: ${wordData.word} ✅`;
+      feedbackWord.className = "feedback ok";
+    } else if (activeRunaways.size > 0) {
+      feedbackWord.textContent = "🏃‍♂️ Kaçan bir harf var! Tutup boş kutusuna geri koyabilirsin.";
+      feedbackWord.className = "feedback warn";
+    } else {
+      feedbackWord.textContent = "";
+      feedbackWord.className = "feedback";
+    }
+  }
+
   solveInput.value = "";
   solveInput.placeholder = `${wordData.word.length} harfli cevabı yaz...`;
 
-  if (solvedWordsMap[wordId]) {
-    feedbackWord.textContent = `Bu kelime çözüldü: ${wordData.word} ✅`;
-    feedbackWord.className = "feedback ok";
-  } else {
+  if (!solvedWordsMap[wordId]) {
     solveInput.focus();
   }
 }
@@ -318,6 +374,8 @@ function selectWord(wordId) {
    3. İkisi de doluysa -> Aradaki boş rastgele bir harf
    ========================================================= */
 btnWordHint.addEventListener("click", () => {
+  if (finalStepShown || isWaveResetting) return;
+
   const wordData = WORDS_MAP.find(w => w.id === activeWordId);
   if (!wordData) return;
 
@@ -332,7 +390,10 @@ btnWordHint.addEventListener("click", () => {
 
   const first = cells[0];
   const last = cells[cells.length - 1];
-  const isRevealed = (c) => Boolean(cellRevealed[`${c.r},${c.c}`]);
+  const isRevealed = (c) => {
+    const key = `${c.r},${c.c}`;
+    return Boolean(cellRevealed[key]) || escapedCells.has(key);
+  };
 
   if (!isRevealed(first)) {
     targetCell = first;
@@ -350,12 +411,16 @@ btnWordHint.addEventListener("click", () => {
     feedbackWord.textContent = `💡 Haritaya bir harf yerleştirildi: '${targetCell.ch}'`;
     feedbackWord.className = "feedback ok";
 
-    checkAllWordsSolvedStatus();
+    const anyNewlySolved = checkAllWordsSolvedStatus();
 
-    if (isAllSolved()) {
-      setTimeout(showFinalStepInPanel, 700);
-    } else if (solvedWordsMap[activeWordId]) {
-      setTimeout(moveToNextUnsolved, 700);
+    if (anyNewlySolved) {
+      const newlyEscaped = checkEscapeTriggers();
+      if (newlyEscaped.length > 0) {
+        const firstEscaped = newlyEscaped[0];
+        feedbackWord.textContent = `🏃‍♂️ Eyvah! ${firstEscaped.wordId}. kelimeden '${firstEscaped.ch}' harfi kaçıyor! Tutup yerine koy!`;
+        feedbackWord.className = "feedback warn";
+      }
+      handlePostSolveTransition(newlyEscaped.length > 0);
     }
   } else {
     feedbackWord.textContent = "Bu kelimedeki harfler zaten açılmış durumda!";
@@ -377,14 +442,20 @@ function revealSingleCell(r, c, char) {
 
 /* Kesişimlerle tüm harfleri açılan kelimeleri otomatik tamamla */
 function checkAllWordsSolvedStatus() {
+  let anyNewlySolved = false;
   WORDS_MAP.forEach(w => {
-    const allRevealed = w.cells.every(c => Boolean(cellRevealed[`${c.r},${c.c}`]));
+    const allRevealed = w.cells.every(c => {
+      const key = `${c.r},${c.c}`;
+      return Boolean(cellRevealed[key]) || escapedCells.has(key);
+    });
     if (allRevealed && !solvedWordsMap[w.id]) {
       solvedWordsMap[w.id] = true;
       paintWordAsSolved(w);
+      anyNewlySolved = true;
     }
   });
   updateProgress();
+  return anyNewlySolved;
 }
 
 function isAllSolved() {
@@ -396,7 +467,9 @@ function isAllSolved() {
    ========================================================= */
 function paintWordAsSolved(wordData) {
   wordData.cells.forEach(c => {
-    cellRevealed[`${c.r},${c.c}`] = c.ch;
+    const key = `${c.r},${c.c}`;
+    if (escapedCells.has(key)) return;
+    cellRevealed[key] = c.ch;
     const cellEl = gridEl.querySelector(`.cell[data-row="${c.r}"][data-col="${c.c}"]`);
     if (cellEl) {
       const charSpan = cellEl.querySelector(".cell-char");
@@ -414,10 +487,350 @@ function markWordSolved(wordData) {
 }
 
 /* =========================================================
+   KAÇAN HARF & DALGA SIFIRLAMA ŞAKASI
+   - 2 tamamlanınca -> 1. kelimeden bir harf kaçsın
+   - 3 tamamlanınca -> 2. kelimeden bir harf kaçsın
+   - 4 tamamlanınca -> 3. kelimeden bir harf kaçsın
+   - 5 tamamlanınca -> 4. kelimeden bir harf kaçsın
+   - Hiçbiri yerine konmadan 5 kelime biterse -> tüm harfler büyüyen dalgayla kaçsın ve harita sıfırlanıp kelimeler/sorular değişsin
+   ========================================================= */
+function isNearTargetSlot(item) {
+  const targetRect = item.cellEl.getBoundingClientRect();
+  const tileCenterX = item.x + item.width / 2;
+  const tileCenterY = item.y + item.height / 2;
+  const pad = 22;
+  return (
+    tileCenterX >= targetRect.left - pad &&
+    tileCenterX <= targetRect.right + pad &&
+    tileCenterY >= targetRect.top - pad &&
+    tileCenterY <= targetRect.bottom + pad
+  );
+}
+
+function spawnRunawayLetter(wordId) {
+  const wordData = WORDS_MAP.find(w => w.id === wordId);
+  if (!wordData || typeof wordData.escapeCellIndex !== "number") return null;
+
+  const escCell = wordData.cells[wordData.escapeCellIndex];
+  const key = `${escCell.r},${escCell.c}`;
+  if (activeRunaways.has(key)) return null;
+
+  const cellEl = gridEl.querySelector(`.cell[data-row="${escCell.r}"][data-col="${escCell.c}"]`);
+  if (!cellEl) return null;
+
+  delete cellRevealed[key];
+  escapedCells.add(key);
+
+  const charSpan = cellEl.querySelector(".cell-char");
+  if (charSpan) charSpan.textContent = "";
+  cellEl.classList.remove("solved", "hinted");
+  cellEl.classList.add("escaped-slot");
+
+  const rect = cellEl.getBoundingClientRect();
+
+  const tileEl = document.createElement("div");
+  tileEl.className = "runaway-letter";
+  tileEl.style.width = `${rect.width}px`;
+  tileEl.style.height = `${rect.height}px`;
+
+  const innerEl = document.createElement("div");
+  innerEl.className = "runaway-inner";
+  innerEl.textContent = escCell.ch;
+  tileEl.appendChild(innerEl);
+  document.body.appendChild(tileEl);
+
+  const dirX = rect.left > window.innerWidth / 2 ? -1 : 1;
+  const dirY = rect.top > window.innerHeight / 2 ? -1 : 1;
+
+  const item = {
+    key,
+    wordId,
+    r: escCell.r,
+    c: escCell.c,
+    ch: escCell.ch,
+    cellEl,
+    tileEl,
+    width: rect.width,
+    height: rect.height,
+    x: rect.left,
+    y: rect.top,
+    vx: dirX * (1.55 + Math.random() * 0.75),
+    vy: dirY * (1.35 + Math.random() * 0.75),
+    grabbed: false,
+    pointerId: null
+  };
+
+  tileEl.style.transform = `translate3d(${item.x}px, ${item.y}px, 0)`;
+
+  tileEl.addEventListener("pointerdown", (e) => {
+    e.preventDefault();
+    if (isWaveResetting || finalStepShown) return;
+    unlockAudio();
+
+    item.grabbed = true;
+    item.pointerId = e.pointerId;
+    tileEl.classList.add("grabbed");
+    item.cellEl.classList.add("escape-target-highlight");
+    try {
+      tileEl.setPointerCapture(e.pointerId);
+    } catch (_) {}
+
+    item.x = e.clientX - item.width / 2;
+    item.y = e.clientY - item.height / 2;
+    tileEl.style.transform = `translate3d(${item.x}px, ${item.y}px, 0)`;
+    item.cellEl.classList.toggle("drag-over", isNearTargetSlot(item));
+  });
+
+  tileEl.addEventListener("pointermove", (e) => {
+    if (!item.grabbed || e.pointerId !== item.pointerId) return;
+    item.x = Math.min(Math.max(4, e.clientX - item.width / 2), window.innerWidth - item.width - 4);
+    item.y = Math.min(Math.max(4, e.clientY - item.height / 2), window.innerHeight - item.height - 4);
+    tileEl.style.transform = `translate3d(${item.x}px, ${item.y}px, 0)`;
+    item.cellEl.classList.toggle("drag-over", isNearTargetSlot(item));
+  });
+
+  const releaseDrag = (e) => {
+    if (!item.grabbed || e.pointerId !== item.pointerId) return;
+    try {
+      tileEl.releasePointerCapture(e.pointerId);
+    } catch (_) {}
+
+    const landed = e.type === "pointerup" && isNearTargetSlot(item);
+    item.grabbed = false;
+    item.pointerId = null;
+    tileEl.classList.remove("grabbed");
+    item.cellEl.classList.remove("drag-over", "escape-target-highlight");
+
+    if (landed && !isWaveResetting) {
+      returnRunawayToSlot(item);
+    } else {
+      const angle = Math.random() * Math.PI * 2;
+      const speed = 1.9 + Math.random() * 0.7;
+      item.vx = Math.cos(angle) * speed;
+      item.vy = Math.sin(angle) * speed;
+    }
+  };
+
+  tileEl.addEventListener("pointerup", releaseDrag);
+  tileEl.addEventListener("pointercancel", releaseDrag);
+
+  activeRunaways.set(key, item);
+  startRunawaysLoop();
+  return { wordId, ch: escCell.ch };
+}
+
+function startRunawaysLoop() {
+  if (runawayRafId) return;
+  let lastTime = performance.now();
+
+  const step = (now) => {
+    const dt = Math.min(32, Math.max(4, now - lastTime)) / 16.67;
+    lastTime = now;
+
+    if (activeRunaways.size === 0 || isWaveResetting) {
+      runawayRafId = null;
+      return;
+    }
+
+    const margin = 12;
+
+    activeRunaways.forEach((item) => {
+      if (item.grabbed) return;
+
+      item.x += item.vx * dt;
+      item.y += item.vy * dt;
+
+      if (item.x <= margin) {
+        item.x = margin;
+        item.vx = Math.abs(item.vx);
+      } else if (item.x >= window.innerWidth - item.width - margin) {
+        item.x = Math.max(margin, window.innerWidth - item.width - margin);
+        item.vx = -Math.abs(item.vx);
+      }
+
+      if (item.y <= margin) {
+        item.y = margin;
+        item.vy = Math.abs(item.vy);
+      } else if (item.y >= window.innerHeight - item.height - margin) {
+        item.y = Math.max(margin, window.innerHeight - item.height - margin);
+        item.vy = -Math.abs(item.vy);
+      }
+
+      if (Math.random() < 0.015 * dt) {
+        item.vx += (Math.random() - 0.5) * 0.45;
+        item.vy += (Math.random() - 0.5) * 0.45;
+        const speed = Math.hypot(item.vx, item.vy);
+        if (speed > 2.7) {
+          item.vx = (item.vx / speed) * 2.5;
+          item.vy = (item.vy / speed) * 2.5;
+        } else if (speed < 1.3) {
+          item.vx = (item.vx / (speed || 1)) * 1.6;
+          item.vy = (item.vy / (speed || 1)) * 1.6;
+        }
+      }
+
+      item.tileEl.style.transform = `translate3d(${item.x}px, ${item.y}px, 0)`;
+    });
+
+    runawayRafId = requestAnimationFrame(step);
+  };
+
+  runawayRafId = requestAnimationFrame(step);
+}
+
+function returnRunawayToSlot(item) {
+  if (!activeRunaways.has(item.key)) return;
+  activeRunaways.delete(item.key);
+  escapedCells.delete(item.key);
+  item.tileEl.remove();
+
+  item.cellEl.classList.remove("escaped-slot", "drag-over", "escape-target-highlight");
+  const charSpan = item.cellEl.querySelector(".cell-char");
+  if (charSpan) charSpan.textContent = item.ch;
+  cellRevealed[item.key] = item.ch;
+  item.cellEl.classList.add("solved");
+  returnedEscapeCount += 1;
+
+  if (isAllSolved()) {
+    if (activeRunaways.size === 0) {
+      feedbackWord.textContent = "Harika! Tüm kaçan harfler yerine kondu! 🎉";
+      feedbackWord.className = "feedback ok";
+      setTimeout(showFinalStepInPanel, 550);
+    } else {
+      feedbackWord.textContent = `Harf yakalandı! Kalan ${activeRunaways.size} kaçan harfi de yerine koy 🏃‍♂️`;
+      feedbackWord.className = "feedback warn";
+    }
+  } else if (!finalStepShown) {
+    feedbackWord.textContent = `Kaçan '${item.ch}' harfi yakalanıp yerine kondu! 💪`;
+    feedbackWord.className = "feedback ok";
+  }
+}
+
+function checkEscapeTriggers() {
+  const escapedNow = [];
+
+  if (solvedWordsMap[2] && solvedWordsMap[1] && !escapedTriggered[1]) {
+    escapedTriggered[1] = true;
+    const res = spawnRunawayLetter(1);
+    if (res) escapedNow.push(res);
+  }
+  if (solvedWordsMap[3] && solvedWordsMap[2] && !escapedTriggered[2]) {
+    escapedTriggered[2] = true;
+    const res = spawnRunawayLetter(2);
+    if (res) escapedNow.push(res);
+  }
+  if (solvedWordsMap[4] && solvedWordsMap[3] && !escapedTriggered[3]) {
+    escapedTriggered[3] = true;
+    const res = spawnRunawayLetter(3);
+    if (res) escapedNow.push(res);
+  }
+  if (solvedWordsMap[5] && solvedWordsMap[4] && !escapedTriggered[4]) {
+    escapedTriggered[4] = true;
+    const res = spawnRunawayLetter(4);
+    if (res) escapedNow.push(res);
+  }
+
+  return escapedNow;
+}
+
+function handlePostSolveTransition(preserveEscapeWarning = false) {
+  if (isAllSolved()) {
+    if (returnedEscapeCount === 0) {
+      setTimeout(triggerWaveEscapeAndReset, 750);
+    } else if (activeRunaways.size === 0) {
+      setTimeout(showFinalStepInPanel, 700);
+    } else {
+      feedbackWord.textContent = "Son adıma geçmek için kaçan harfi yakalayıp boş kutusuna geri koy! 🏃‍♂️";
+      feedbackWord.className = "feedback warn";
+    }
+  } else {
+    setTimeout(() => moveToNextUnsolved(preserveEscapeWarning), preserveEscapeWarning ? 950 : 700);
+  }
+}
+
+function triggerWaveEscapeAndReset() {
+  if (isWaveResetting || finalStepShown) return;
+  isWaveResetting = true;
+  setGameControlsDisabled(true);
+
+  if (runawayRafId) {
+    cancelAnimationFrame(runawayRafId);
+    runawayRafId = null;
+  }
+
+  feedbackWord.textContent = "Eyvah! Kaçan harfleri hiç yakalamadığın için tüm harfler büyüyen dalga halinde kaçıyor! 🌊🏃‍♂️";
+  feedbackWord.className = "feedback warn";
+
+  const fleeTiles = [];
+
+  activeRunaways.forEach((item) => {
+    item.grabbed = false;
+    item.cellEl.classList.remove("escaped-slot", "drag-over", "escape-target-highlight");
+    const rect = item.tileEl.getBoundingClientRect();
+    item.tileEl.remove();
+
+    const fleeEl = document.createElement("div");
+    fleeEl.className = "wave-flee-tile";
+    fleeEl.textContent = item.ch;
+    fleeEl.style.left = `${rect.left}px`;
+    fleeEl.style.top = `${rect.top}px`;
+    fleeEl.style.width = `${rect.width}px`;
+    fleeEl.style.height = `${rect.height}px`;
+    fleeEl.style.animationDelay = `${(item.r + item.c) * 75}ms`;
+    fleeEl.style.setProperty("--dx", `${(item.c - 3) * 95 + (Math.random() * 160 - 80)}px`);
+    fleeEl.style.setProperty("--dy", `${-(rect.top + 320 + Math.random() * 140)}px`);
+    fleeEl.style.setProperty("--rot", `${(Math.random() * 50 - 25).toFixed(1)}deg`);
+    document.body.appendChild(fleeEl);
+    fleeTiles.push(fleeEl);
+  });
+  activeRunaways.clear();
+  escapedCells.clear();
+
+  let maxDelay = 0;
+  gridEl.querySelectorAll(".cell-letter").forEach((cellEl) => {
+    const r = Number(cellEl.dataset.row);
+    const c = Number(cellEl.dataset.col);
+    const charSpan = cellEl.querySelector(".cell-char");
+    const ch = charSpan ? charSpan.textContent.trim() : "";
+
+    cellEl.classList.remove("solved", "hinted", "escaped-slot", "active-row", "active-clue-cell", "drag-over", "escape-target-highlight");
+    if (!ch) return;
+
+    const rect = cellEl.getBoundingClientRect();
+    charSpan.textContent = "";
+
+    const delay = (r + c) * 75;
+    if (delay > maxDelay) maxDelay = delay;
+
+    const fleeEl = document.createElement("div");
+    fleeEl.className = "wave-flee-tile";
+    fleeEl.textContent = ch;
+    fleeEl.style.left = `${rect.left}px`;
+    fleeEl.style.top = `${rect.top}px`;
+    fleeEl.style.width = `${rect.width}px`;
+    fleeEl.style.height = `${rect.height}px`;
+    fleeEl.style.animationDelay = `${delay}ms`;
+    fleeEl.style.setProperty("--dx", `${(c - 3) * 95 + (Math.random() * 140 - 70)}px`);
+    fleeEl.style.setProperty("--dy", `${-(rect.top + 320 + Math.random() * 140)}px`);
+    fleeEl.style.setProperty("--rot", `${(Math.random() * 50 - 25).toFixed(1)}deg`);
+    document.body.appendChild(fleeEl);
+    fleeTiles.push(fleeEl);
+  });
+
+  setTimeout(() => {
+    fleeTiles.forEach(el => el.remove());
+    currentSetIndex = (currentSetIndex + 1) % WORD_SETS.length;
+    WORDS_MAP = WORD_SETS[currentSetIndex];
+    initGrid("🌊 Harita sıfırlandı! Yeni kelimeler ve sorular yüklendi — kaçanları yakalamayı unutma! 😜");
+  }, maxDelay + 1100);
+}
+
+/* =========================================================
    CEVAP GÖNDERME KONTROLÜ
    ========================================================= */
 $("solve-form").addEventListener("submit", (e) => {
   e.preventDefault();
+  if (finalStepShown || isWaveResetting) return;
   unlockAudio();
 
   const wordData = WORDS_MAP.find(w => w.id === activeWordId);
@@ -439,11 +852,14 @@ $("solve-form").addEventListener("submit", (e) => {
 
     markWordSolved(wordData);
 
-    if (isAllSolved()) {
-      setTimeout(showFinalStepInPanel, 700);
-    } else {
-      setTimeout(moveToNextUnsolved, 700);
+    const newlyEscaped = checkEscapeTriggers();
+    if (newlyEscaped.length > 0) {
+      const firstEscaped = newlyEscaped[0];
+      feedbackWord.textContent = `🏃‍♂️ Eyvah! ${firstEscaped.wordId}. kelimeden '${firstEscaped.ch}' harfi kaçıyor! Tutup yerine koy!`;
+      feedbackWord.className = "feedback warn";
     }
+
+    handlePostSolveTransition(newlyEscaped.length > 0);
   } else {
     feedbackWord.textContent = "Cevap doğru değil, tekrar dene 🔍";
     feedbackWord.className = "feedback bad";
@@ -451,9 +867,9 @@ $("solve-form").addEventListener("submit", (e) => {
   }
 });
 
-function moveToNextUnsolved() {
+function moveToNextUnsolved(preserveFeedback = false) {
   const nextWord = WORDS_MAP.find(w => !solvedWordsMap[w.id]);
-  if (nextWord) selectWord(nextWord.id);
+  if (nextWord) selectWord(nextWord.id, preserveFeedback);
 }
 
 function updateProgress() {
@@ -468,8 +884,10 @@ function shakeElement(el) {
 }
 
 /* =========================================================
-   HARİTAYI KAYBETMEDEN FİNAL PANELİ
-   KOPYA VERME YOK, BUTONDA SADECE "Onayla" YAZIYOR!
+   HARİTAYI KAYBETMEDEN FİNAL VE ŞAKA AKIŞI
+   Aşama 1: Baş harfleri birleştir -> BENİM
+   Aşama 2: "Emin misin?" -> Evet
+   Aşama 3: Kalın "olsana" içeren yazı + "Emin misin?" -> Sürükle & Onayla
    ========================================================= */
 function showFinalStepInPanel() {
   if (finalStepShown) return;
@@ -482,7 +900,7 @@ function showFinalStepInPanel() {
       <span class="q-meta">Son Adım</span>
     </div>
     <p class="q-def" style="color: #ffffff; font-weight: 600;">
-      Haritada çözdüğün kelimelerin <b>baş harflerini sırayla (1'den 10'a)</b> birleştirerek gizli şarkının adını yaz:
+      Haritada çözdüğün <b>5 kelimenin baş harflerini sırayla</b> birleştirerek cevabı yaz:
     </p>
 
     <form id="panel-final-form" autocomplete="off" style="margin-top: 14px;">
@@ -508,12 +926,235 @@ function showFinalStepInPanel() {
 
   $("panel-final-form").addEventListener("submit", (e) => {
     e.preventDefault();
+    unlockAudio();
     const guess = cleanTR(finalInput.value).replace(/\s+/g, "");
     const fb = $("feedback-panel-final");
 
-    if (guess === TARGET_SONG) {
-      fb.textContent = "Tebrikler! Şarkı başlıyor... 🎵";
-      fb.className = "feedback ok";
+    if (guess === INITIAL_TARGET) {
+      showJokeStep1();
+    } else {
+      fb.textContent = "Cevap doğru değil. Haritadaki kelimelerin baş harflerini sırayla birleştirip tekrar dene!";
+      fb.className = "feedback bad";
+      shakeElement(finalInput);
+    }
+  });
+}
+
+/* ---- ŞAKA AŞAMASI 1: İlk "Emin misin?" ---- */
+function showJokeStep1() {
+  const card = $("question-card");
+  card.innerHTML = `
+    <div class="q-header">
+      <span class="q-badge" style="color: #ffd36e;">🤔 EMİN MİSİN?</span>
+      <span class="q-meta">Kontrol</span>
+    </div>
+    <div class="joke-box">
+      <div class="combine-area">
+        <span class="fixed-word">BENİM</span>
+      </div>
+      <p class="joke-question">
+        Şarkının adının sadece <b>'BENİM'</b> olduğuna emin misin? 🤔
+      </p>
+      <div class="joke-actions">
+        <button id="btn-joke-yes" type="button" class="btn primary btn-inline">Evet</button>
+      </div>
+    </div>
+  `;
+
+  $("btn-joke-yes").addEventListener("click", () => {
+    unlockAudio();
+    showJokeStep2();
+  });
+}
+
+/* ---- ŞAKA AŞAMASI 2: Kalın "olsana" + Sürükle-Bırak ---- */
+function showJokeStep2() {
+  const card = $("question-card");
+  card.innerHTML = `
+    <div class="q-header">
+      <span class="q-badge" style="color: #ffd36e;">😏 TEKRAR SORUYORUM</span>
+      <span class="q-meta">Son Onay</span>
+    </div>
+    <div class="joke-box">
+      <p class="joke-question">
+        Sadece 'Benim' diye şarkı ismi biraz yalnız kalmadı mı? Biraz daha dikkatli bakıp doğru cevaptan emin
+        <b id="draggable-olsana" class="draggable-word" draggable="true">olsana</b>.
+        Tekrar soruyorum, emin misin?
+      </p>
+
+      <form id="joke-step2-form" autocomplete="off">
+        <div class="combine-area" id="combine-area">
+          <span class="fixed-word">BENİM</span>
+          <input
+            id="drop-slot"
+            class="drop-slot"
+            type="text"
+            autocomplete="off"
+            autocorrect="off"
+            spellcheck="false"
+          />
+        </div>
+
+        <div class="joke-actions" style="margin-top: 12px;">
+          <button id="btn-joke-confirm" type="submit" class="btn primary btn-inline">Onayla</button>
+        </div>
+      </form>
+      <div class="feedback" id="feedback-joke" role="status" aria-live="polite"></div>
+    </div>
+  `;
+
+  const dragEl = $("draggable-olsana");
+  const combineArea = $("combine-area");
+  const dropSlot = $("drop-slot");
+  const feedbackJoke = $("feedback-joke");
+
+  let olsanaDropped = false;
+  let isDraggingOlsana = false;
+
+  function placeOlsana() {
+    if (olsanaDropped) return;
+    olsanaDropped = true;
+    isDraggingOlsana = false;
+
+    dropSlot.value = "OLSANA";
+    dropSlot.readOnly = true;
+    dropSlot.classList.remove("drag-over");
+    dropSlot.classList.add("filled");
+
+    dragEl.classList.remove("dragging");
+    dragEl.classList.add("placed");
+    dragEl.setAttribute("draggable", "false");
+
+    feedbackJoke.textContent = "İşte şimdi oldu: BENİM OLSANA ✅";
+    feedbackJoke.className = "feedback ok";
+  }
+
+  function isPointInsideDropZone(clientX, clientY) {
+    const slotRect = dropSlot.getBoundingClientRect();
+    const areaRect = combineArea.getBoundingClientRect();
+    const pad = 16;
+    const inSlot =
+      clientX >= slotRect.left - pad &&
+      clientX <= slotRect.right + pad &&
+      clientY >= slotRect.top - pad &&
+      clientY <= slotRect.bottom + pad;
+    const inArea =
+      clientX >= areaRect.left &&
+      clientX <= areaRect.right &&
+      clientY >= areaRect.top &&
+      clientY <= areaRect.bottom;
+    return inSlot || inArea;
+  }
+
+  /* Masaüstü HTML5 Drag & Drop */
+  dragEl.addEventListener("dragstart", (e) => {
+    if (olsanaDropped) {
+      e.preventDefault();
+      return;
+    }
+    isDraggingOlsana = true;
+    if (e.dataTransfer) {
+      e.dataTransfer.setData("text/plain", "OLSANA");
+      e.dataTransfer.effectAllowed = "move";
+    }
+    dragEl.classList.add("dragging");
+  });
+
+  dragEl.addEventListener("dragend", () => {
+    isDraggingOlsana = false;
+    dragEl.classList.remove("dragging");
+    dropSlot.classList.remove("drag-over");
+  });
+
+  [dropSlot, combineArea].forEach((zone) => {
+    zone.addEventListener("dragover", (e) => {
+      if (!isDraggingOlsana || olsanaDropped) return;
+      e.preventDefault();
+      if (e.dataTransfer) e.dataTransfer.dropEffect = "move";
+      dropSlot.classList.add("drag-over");
+    });
+
+    zone.addEventListener("dragleave", (e) => {
+      if (e.relatedTarget && combineArea.contains(e.relatedTarget)) return;
+      dropSlot.classList.remove("drag-over");
+    });
+
+    zone.addEventListener("drop", (e) => {
+      if (!isDraggingOlsana || olsanaDropped) return;
+      e.preventDefault();
+      placeOlsana();
+    });
+  });
+
+  /* Mobil / Dokunmatik Pointer Events */
+  dragEl.addEventListener("pointerdown", (e) => {
+    if (olsanaDropped || e.pointerType === "mouse") return;
+    e.preventDefault();
+
+    try { dragEl.setPointerCapture(e.pointerId); } catch (err) { }
+    dragEl.classList.add("dragging");
+
+    const ghost = document.createElement("div");
+    ghost.className = "drag-ghost";
+    ghost.textContent = "olsana";
+    ghost.style.left = `${e.clientX}px`;
+    ghost.style.top = `${e.clientY}px`;
+    document.body.appendChild(ghost);
+
+    function onMove(ev) {
+      ghost.style.left = `${ev.clientX}px`;
+      ghost.style.top = `${ev.clientY}px`;
+      if (isPointInsideDropZone(ev.clientX, ev.clientY)) {
+        dropSlot.classList.add("drag-over");
+      } else {
+        dropSlot.classList.remove("drag-over");
+      }
+    }
+
+    function cleanup() {
+      dragEl.classList.remove("dragging");
+      dropSlot.classList.remove("drag-over");
+      if (ghost.parentNode) ghost.parentNode.removeChild(ghost);
+      document.removeEventListener("pointermove", onMove);
+      document.removeEventListener("pointerup", onUp);
+      document.removeEventListener("pointercancel", onCancel);
+    }
+
+    function onUp(ev) {
+      const dropped = isPointInsideDropZone(ev.clientX, ev.clientY);
+      cleanup();
+      if (dropped) placeOlsana();
+    }
+
+    function onCancel() {
+      cleanup();
+    }
+
+    document.addEventListener("pointermove", onMove);
+    document.addEventListener("pointerup", onUp);
+    document.addEventListener("pointercancel", onCancel);
+  });
+
+  /* Son Onay (Yazarak denemeyi reddet, sürükleyerek bırakmayı kabul et) */
+  $("joke-step2-form").addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    if (!olsanaDropped) {
+      const typed = cleanTR(dropSlot.value).replace(/\s+/g, "");
+      if (typed === "OLSANA" || typed === FINAL_TARGET) {
+        feedbackJoke.textContent = "Çok yakın! Cümleye dikkatli bak 😉";
+      } else {
+        feedbackJoke.textContent = "Cevap kabul edilmedi, tekrar dene!";
+      }
+      feedbackJoke.className = "feedback bad";
+      shakeElement(dropSlot);
+      return;
+    }
+
+    const combined = cleanTR(`BENİM ${dropSlot.value}`).replace(/\s+/g, "");
+    if (combined === FINAL_TARGET) {
+      feedbackJoke.textContent = "Harika! Şarkı başlıyor... 🎵";
+      feedbackJoke.className = "feedback ok";
 
       playSongNow();
 
@@ -521,10 +1162,6 @@ function showFinalStepInPanel() {
         showScreen("screen-player");
         launchConfetti();
       }, 600);
-    } else {
-      fb.textContent = "Cevap doğru değil. Haritadaki kelimelerin baş harflerini sırayla inceleyip tekrar dene!";
-      fb.className = "feedback bad";
-      shakeElement(finalInput);
     }
   });
 }
