@@ -821,7 +821,7 @@ function triggerWaveEscapeAndReset() {
     fleeTiles.forEach(el => el.remove());
     currentSetIndex = (currentSetIndex + 1) % WORD_SETS.length;
     WORDS_MAP = WORD_SETS[currentSetIndex];
-    initGrid("🌊 Harita sıfırlandı! Yeni kelimeler ve sorular yüklendi — kaçanları yakalamayı unutma! 😜");
+    initGrid(" Harita sıfırlandı! Yeni kelimeler ve sorular yüklendi — kaçanları yakalamayı unutma! ");
   }, maxDelay + 1100);
 }
 
