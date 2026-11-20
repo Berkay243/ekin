@@ -182,7 +182,7 @@ body {
 
 .crossword-grid {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(8, 1fr);
   gap: 2px;
   background-color: #272729; /* Izgara çizgileri */
   padding: 4px;
@@ -190,7 +190,7 @@ body {
   border-radius: 6px;
   user-select: none;
   width: 100%;
-  max-width: 350px;
+  max-width: 380px;
 }
 
 /* Hücreler */

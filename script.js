@@ -1,174 +1,204 @@
 /* =========================================================
-   CRUSH - BENİM OLSANA | ÇAPRAZ BULMACA HARİTASI & ŞAKA AKIŞI
+   HEPSİ - ÜÇ KALP | ÇAPRAZ BULMACA HARİTASI & BİLMECE AKIŞI
    
    Tek parça bağlantılı (Yatay + Dikey), çakışma ve istenmeyen
-   komşuluk barındırmayan 7x7 gazete çapraz bulmacası.
+   komşuluk barındırmayan 8x8 gazete çapraz bulmacası.
    
-   Baş Harfler: B - E - N - İ - M (BENİM -> BENİM OLSANA)
+   Baş Harfler: Ü - Ç - K - A - L - P (ÜÇ KALP)
    ========================================================= */
 
-const ROWS = 7;
-const COLS = 7;
+const ROWS = 8;
+const COLS = 8;
 
 const WORD_SETS = [
   [
     {
       id: 1,
-      letter: "B",
-      word: "BESTE",
+      letter: "Ü",
+      word: "ÜNVAN",
       direction: "across",
-      escapeCellIndex: 2, // 'S' (1,2) - kesişim dışı
-      definition: "Bir müzik parçasını oluşturan ezgilerin bütünü; bir şairin dizeleri üzerine kurulan müzik eseri.",
-      hint: "5 harfli. Şarkı sözlerinin buluştuğu melodi eseri.",
+      escapeCellIndex: 1, // 'N' (1,1) - kesişim dışı
+      definition: "Nüfus kütüğüne yazılmaz ama ismin önüne geçip kartvizite yerleşir; kişinin doğuştan getirdiği değil, mesleği veya makamı sayesinde sonradan kuşandığı resmi sıfat.",
+      hint: "5 harfli. Kişinin meslek veya makamından dolayı isminin önüne eklenen sıfat, san.",
       cells: [
-        { r: 1, c: 0, ch: "B" },
-        { r: 1, c: 1, ch: "E" },
-        { r: 1, c: 2, ch: "S" },
-        { r: 1, c: 3, ch: "T" },
-        { r: 1, c: 4, ch: "E" }
+        { r: 1, c: 0, ch: "Ü" },
+        { r: 1, c: 1, ch: "N" },
+        { r: 1, c: 2, ch: "V" },
+        { r: 1, c: 3, ch: "A" },
+        { r: 1, c: 4, ch: "N" }
       ]
     },
     {
       id: 2,
-      letter: "E",
-      word: "ETKEN",
+      letter: "Ç",
+      word: "ÇARK",
       direction: "down",
-      escapeCellIndex: 2, // 'K' (2,3) - kesişim dışı
-      definition: "Bir etki veya sonuca yol açan sebep, unsur; faktör.",
-      hint: "5 harfli. Bir sonucu doğuran temel unsur, faktör.",
+      escapeCellIndex: 2, // 'R' (2,3) - kesişim dışı
+      definition: "Kimi zaman bir saatin kalbinde tıkırdayan dişli, kimi zaman insanı öğüttüğü söylenen acımasız düzen; deyimde 'etmek' fiiliyle birleştiğinde ise verilen sözden veya karardan geri dönmeyi anlatır.",
+      hint: "4 harfli. Hem makine dişlisi hem de '... etmek' deyiminde sözünden dönmek.",
       cells: [
-        { r: 0, c: 3, ch: "E" },
-        { r: 1, c: 3, ch: "T" },
-        { r: 2, c: 3, ch: "K" },
-        { r: 3, c: 3, ch: "E" },
-        { r: 4, c: 3, ch: "N" }
+        { r: 0, c: 3, ch: "Ç" },
+        { r: 1, c: 3, ch: "A" },
+        { r: 2, c: 3, ch: "R" },
+        { r: 3, c: 3, ch: "K" }
       ]
     },
     {
       id: 3,
-      letter: "N",
-      word: "NEFES",
+      letter: "K",
+      word: "KABUS",
       direction: "across",
-      escapeCellIndex: 2, // 'F' (3,4) - kesişim dışı
-      definition: "Canlıların yaşamak için ciğerlerine çekip dışarı verdiği hava; soluk.",
-      hint: "5 harfli. Alıp verdiğimiz hayat soluğu.",
+      escapeCellIndex: 2, // 'B' (3,5) - kesişim dışı
+      definition: "Göz kapakları kapandığında zihnin kendi kendine kurduğu karanlık pusu; uyandıktan sonra bile kalp çarpıntısı bir süre dinmeyen gece ağırlığı.",
+      hint: "5 harfli. Uykuda görülen korkulu düş, karabasan.",
       cells: [
-        { r: 3, c: 2, ch: "N" },
-        { r: 3, c: 3, ch: "E" },
-        { r: 3, c: 4, ch: "F" },
-        { r: 3, c: 5, ch: "E" },
-        { r: 3, c: 6, ch: "S" }
+        { r: 3, c: 3, ch: "K" },
+        { r: 3, c: 4, ch: "A" },
+        { r: 3, c: 5, ch: "B" },
+        { r: 3, c: 6, ch: "U" },
+        { r: 3, c: 7, ch: "S" }
       ]
     },
     {
       id: 4,
-      letter: "İ",
-      word: "İSTEK",
+      letter: "A",
+      word: "ASUDE",
       direction: "down",
-      escapeCellIndex: 2, // 'T' (4,6) - kesişim dışı
-      definition: "Bir şeye karşı duyulan içsel yönelim, arzu; bir şeyin olmasını gönülden dileme.",
-      hint: "5 harfli. Arzu, talep veya dilek.",
+      escapeCellIndex: 1, // 'S' (2,6) - kesişim dışı
+      definition: "Yahya Kemal'in bahar ülkesini anlatırken kullandığı; gürültünün, telaşın ve fırtınanın uzağında kalmış dingin, sessiz ve başı dinç olma hali.",
+      hint: "5 harfli. Dingin, huzurlu, sakin ve gürültüden uzak (edebi dilde).",
       cells: [
-        { r: 2, c: 6, ch: "İ" },
-        { r: 3, c: 6, ch: "S" },
-        { r: 4, c: 6, ch: "T" },
-        { r: 5, c: 6, ch: "E" },
-        { r: 6, c: 6, ch: "K" }
+        { r: 1, c: 6, ch: "A" },
+        { r: 2, c: 6, ch: "S" },
+        { r: 3, c: 6, ch: "U" },
+        { r: 4, c: 6, ch: "D" },
+        { r: 5, c: 6, ch: "E" }
       ]
     },
     {
       id: 5,
-      letter: "M",
-      word: "MÜZİK",
+      letter: "L",
+      word: "LATİFE",
       direction: "across",
-      definition: "Seslerin belirli bir ahenk, ritim ve melodi içinde düzenlenmesi sanatı; musiki.",
-      hint: "5 harfli. Notaların ve şarkıların sanatı.",
+      escapeCellIndex: 3, // 'İ' (5,4) - kesişim dışı
+      definition: "İncitmeden güldürme inceliği taşıyan, kaba mizahın aksine zarafet ve zekâ isteyen nükte; eskilerin 'şaka' kelimesini hafif bulduklarında tercih ettiği zarif söz.",
+      hint: "6 harfli. İnce, nazik ve zekice yapılan şaka, nükte.",
       cells: [
-        { r: 6, c: 2, ch: "M" },
-        { r: 6, c: 3, ch: "Ü" },
-        { r: 6, c: 4, ch: "Z" },
-        { r: 6, c: 5, ch: "İ" },
-        { r: 6, c: 6, ch: "K" }
+        { r: 5, c: 1, ch: "L" },
+        { r: 5, c: 2, ch: "A" },
+        { r: 5, c: 3, ch: "T" },
+        { r: 5, c: 4, ch: "İ" },
+        { r: 5, c: 5, ch: "F" },
+        { r: 5, c: 6, ch: "E" }
+      ]
+    },
+    {
+      id: 6,
+      letter: "P",
+      word: "PAYE",
+      direction: "down",
+      definition: "Farsça kökeninde merdiven basamağı iken mecazen kişiye biçilen mertebeye dönüşen; 'vermek' fiiliyle kullanıldığında birini hak ettiğinden yukarıda tutmayı anlatan itibar ölçüsü.",
+      hint: "4 harfli. Rütbe, aşama, derece; '... vermek' deyimiyle birini yüceltmek.",
+      cells: [
+        { r: 4, c: 2, ch: "P" },
+        { r: 5, c: 2, ch: "A" },
+        { r: 6, c: 2, ch: "Y" },
+        { r: 7, c: 2, ch: "E" }
       ]
     }
   ],
   [
     {
       id: 1,
-      letter: "B",
-      word: "BAKIŞ",
+      letter: "Ü",
+      word: "ÜSLUP",
       direction: "across",
-      escapeCellIndex: 3, // 'I' (1,3) - kesişim dışı
-      definition: "Gözlerin bir şeye çevrilmesiyle oluşan anlamlı ifade; nazar.",
-      hint: "5 harfli. Gözle süzme veya yöneltilen ilk dikkat.",
+      escapeCellIndex: 1, // 'S' (1,1) - kesişim dışı
+      definition: "Buffon'un 'İnsanın bizzat kendisidir' diyerek özetlediği; ne anlatıldığından ziyade nasıl anlatıldığını belirleyen ve bir esere sahibinin parmak izini vuran anlatım kimliği.",
+      hint: "5 harfli. Bir sanatçının veya yazarın kendine özgü anlatım biçimi, biçem.",
       cells: [
-        { r: 1, c: 0, ch: "B" },
-        { r: 1, c: 1, ch: "A" },
-        { r: 1, c: 2, ch: "K" },
-        { r: 1, c: 3, ch: "I" },
-        { r: 1, c: 4, ch: "Ş" }
+        { r: 1, c: 0, ch: "Ü" },
+        { r: 1, c: 1, ch: "S" },
+        { r: 1, c: 2, ch: "L" },
+        { r: 1, c: 3, ch: "U" },
+        { r: 1, c: 4, ch: "P" }
       ]
     },
     {
       id: 2,
-      letter: "E",
-      word: "EKİN",
+      letter: "Ç",
+      word: "ÇUHA",
       direction: "down",
-      escapeCellIndex: 2, // 'İ' (2,2) - kesişim dışı
-      definition: "Tarlaya atılan tohumun filizlenip boy vermiş hali; bir toplumun kültür ve uygarlık birikimi.",
-      hint: "4 harfli. Tahılın tarladaki yeşil hali veya kültür.",
+      escapeCellIndex: 2, // 'H' (2,3) - kesişim dışı
+      definition: "Eskiden hem saray kaftanlarına hem de bilardo masalarının yüzeyine serilen; tüysüz, sık dokunmuş ve keçe dokusunu andıran geleneksel yün kumaş.",
+      hint: "4 harfli. Bilardo masalarına da kaplanan, sık dokunmuş tüysüz yün kumaş.",
       cells: [
-        { r: 0, c: 2, ch: "E" },
-        { r: 1, c: 2, ch: "K" },
-        { r: 2, c: 2, ch: "İ" },
-        { r: 3, c: 2, ch: "N" }
+        { r: 0, c: 3, ch: "Ç" },
+        { r: 1, c: 3, ch: "U" },
+        { r: 2, c: 3, ch: "H" },
+        { r: 3, c: 3, ch: "A" }
       ]
     },
     {
       id: 3,
-      letter: "N",
-      word: "NEHİR",
+      letter: "K",
+      word: "KAİDE",
       direction: "across",
-      escapeCellIndex: 2, // 'H' (3,4) - kesişim dışı
-      definition: "Yatak boyunca sürekli akarak denize veya göle ulaşan büyük akarsu; ırmak.",
-      hint: "5 harfli. Deniz veya göle dökülen büyük su yolu.",
+      escapeCellIndex: 2, // 'İ' (3,4) - kesişim dışı
+      definition: "Hem bir heykelin üzerinde yükseldiği taş altlık, hem de istisnaların dahi kendisini bozamadığı söylenen yerleşik ilke.",
+      hint: "5 harfli. Hem sütun/heykel tabanı hem de 'İstisnalar ...yi bozmaz' sözündeki kural.",
       cells: [
-        { r: 3, c: 2, ch: "N" },
-        { r: 3, c: 3, ch: "E" },
-        { r: 3, c: 4, ch: "H" },
-        { r: 3, c: 5, ch: "İ" },
-        { r: 3, c: 6, ch: "R" }
+        { r: 3, c: 2, ch: "K" },
+        { r: 3, c: 3, ch: "A" },
+        { r: 3, c: 4, ch: "İ" },
+        { r: 3, c: 5, ch: "D" },
+        { r: 3, c: 6, ch: "E" }
       ]
     },
     {
       id: 4,
-      letter: "İ",
-      word: "İRADE",
+      letter: "A",
+      word: "ADALE",
       direction: "down",
-      escapeCellIndex: 2, // 'A' (4,6) - kesişim dışı
-      definition: "Bir şeyi yapıp yapmamaya özgürce karar verme ve bunu gerçekleştirme gücü; istenç.",
-      hint: "5 harfli. Karar verme ve uygulama gücü; istenç.",
+      escapeCellIndex: 2, // 'A' (4,5) - kesişim dışı
+      definition: "Kasılıp gevşeyerek harekete hükmeden lifli doku; eski spor spikerlerinin ve anatomi kitaplarının 'kas' kelimesi yerine kullandığı köklü karşılık.",
+      hint: "5 harfli. Vücuttaki kas dokusunun eski ve yaygın eş anlamlısı.",
       cells: [
-        { r: 2, c: 6, ch: "İ" },
-        { r: 3, c: 6, ch: "R" },
-        { r: 4, c: 6, ch: "A" },
-        { r: 5, c: 6, ch: "D" },
-        { r: 6, c: 6, ch: "E" }
+        { r: 2, c: 5, ch: "A" },
+        { r: 3, c: 5, ch: "D" },
+        { r: 4, c: 5, ch: "A" },
+        { r: 5, c: 5, ch: "L" },
+        { r: 6, c: 5, ch: "E" }
       ]
     },
     {
       id: 5,
-      letter: "M",
-      word: "MÜJDE",
+      letter: "L",
+      word: "LEHÇE",
       direction: "across",
-      definition: "Duyulduğunda kişiyi mutlu eden sevinçli haber; muştu.",
-      hint: "5 harfli. Beklenen güzel ve sevinçli haber; muştu.",
+      escapeCellIndex: 2, // 'H' (6,3) - kesişim dışı
+      definition: "Bir ana dilin yazılı belgelerle izlenemeyecek kadar eski dönemlerde kendisinden kopup hem ses hem söz varlığı bakımından bambaşka bir iklime bürünen uzak kolu.",
+      hint: "5 harfli. Bir dilin tarihsel süreçte ses ve yapıca ayrılmış uzak kolu, diyalekt.",
       cells: [
-        { r: 6, c: 2, ch: "M" },
-        { r: 6, c: 3, ch: "Ü" },
-        { r: 6, c: 4, ch: "J" },
-        { r: 6, c: 5, ch: "D" },
-        { r: 6, c: 6, ch: "E" }
+        { r: 6, c: 1, ch: "L" },
+        { r: 6, c: 2, ch: "E" },
+        { r: 6, c: 3, ch: "H" },
+        { r: 6, c: 4, ch: "Ç" },
+        { r: 6, c: 5, ch: "E" }
+      ]
+    },
+    {
+      id: 6,
+      letter: "P",
+      word: "PİLE",
+      direction: "down",
+      definition: "Kumaşa hacim ve hareket kazandırmak için ütüyle veya dikişle üst üste yatırılarak verilen düzenli kıvrım; etek ve perdelerin simetrik kat izi.",
+      hint: "4 harfli. Etek veya perde kumaşına düzenli aralıklarla verilen katlı kıvrım.",
+      cells: [
+        { r: 4, c: 1, ch: "P" },
+        { r: 5, c: 1, ch: "İ" },
+        { r: 6, c: 1, ch: "L" },
+        { r: 7, c: 1, ch: "E" }
       ]
     }
   ]
@@ -177,8 +207,8 @@ const WORD_SETS = [
 let currentSetIndex = 0;
 let WORDS_MAP = WORD_SETS[currentSetIndex];
 
-const INITIAL_TARGET = "BENİM";
-const FINAL_TARGET = "BENİMOLSANA";
+const INITIAL_TARGET = "ÜÇKALP";
+const FINAL_TARGET = "ÜÇKALP";
 
 /* =========================================================
    ELEMENTLER & DURUM
@@ -198,7 +228,7 @@ let audioUnlocked = false;
 let isPlaying = false;
 
 // Kaçan harf & dalga sıfırlama durumu
-let escapedTriggered = { 1: false, 2: false, 3: false, 4: false };
+let escapedTriggered = { 1: false, 2: false, 3: false, 4: false, 5: false };
 let escapedCells = new Set();     // "r,c" kaçmış boş yuvalar
 let activeRunaways = new Map();   // key "r,c" -> runaway nesnesi
 let returnedEscapeCount = 0;
@@ -237,7 +267,7 @@ function initGrid(customFeedback = null) {
 
   activeRunaways.clear();
   escapedCells.clear();
-  escapedTriggered = { 1: false, 2: false, 3: false, 4: false };
+  escapedTriggered = { 1: false, 2: false, 3: false, 4: false, 5: false };
   returnedEscapeCount = 0;
   solvedWordsMap = {};
   cellRevealed = {};
@@ -246,6 +276,7 @@ function initGrid(customFeedback = null) {
   setGameControlsDisabled(false);
 
   gridEl.innerHTML = "";
+  gridEl.style.gridTemplateColumns = `repeat(${COLS}, 1fr)`;
 
   const gridCells = Array.from({ length: ROWS }, () => Array(COLS).fill(null));
 
@@ -492,7 +523,8 @@ function markWordSolved(wordData) {
    - 3 tamamlanınca -> 2. kelimeden bir harf kaçsın
    - 4 tamamlanınca -> 3. kelimeden bir harf kaçsın
    - 5 tamamlanınca -> 4. kelimeden bir harf kaçsın
-   - Hiçbiri yerine konmadan 5 kelime biterse -> tüm harfler büyüyen dalgayla kaçsın ve harita sıfırlanıp kelimeler/sorular değişsin
+   - 6 tamamlanınca -> 5. kelimeden bir harf kaçsın
+   - Hiçbiri yerine konmadan 6 kelime biterse -> tüm harfler büyüyen dalgayla kaçsın ve harita sıfırlanıp kelimeler/sorular değişsin
    ========================================================= */
 function isNearTargetSlot(item) {
   const targetRect = item.cellEl.getBoundingClientRect();
@@ -729,6 +761,11 @@ function checkEscapeTriggers() {
     const res = spawnRunawayLetter(4);
     if (res) escapedNow.push(res);
   }
+  if (solvedWordsMap[6] && solvedWordsMap[5] && !escapedTriggered[5]) {
+    escapedTriggered[5] = true;
+    const res = spawnRunawayLetter(5);
+    if (res) escapedNow.push(res);
+  }
 
   return escapedNow;
 }
@@ -821,7 +858,7 @@ function triggerWaveEscapeAndReset() {
     fleeTiles.forEach(el => el.remove());
     currentSetIndex = (currentSetIndex + 1) % WORD_SETS.length;
     WORDS_MAP = WORD_SETS[currentSetIndex];
-    initGrid(" Harita sıfırlandı! Yeni kelimeler ve sorular yüklendi — kaçanları yakalamayı unutma! ");
+    initGrid("🌊 Harita sıfırlandı! Yeni kelimeler ve sorular yüklendi — kaçanları yakalamayı unutma! 😜");
   }, maxDelay + 1100);
 }
 
@@ -884,10 +921,8 @@ function shakeElement(el) {
 }
 
 /* =========================================================
-   HARİTAYI KAYBETMEDEN FİNAL VE ŞAKA AKIŞI
-   Aşama 1: Baş harfleri birleştir -> BENİM
-   Aşama 2: "Emin misin?" -> Evet
-   Aşama 3: Kalın "olsana" içeren yazı + "Emin misin?" -> Sürükle & Onayla
+   HARİTAYI KAYBETMEDEN FİNAL VE ŞARKI ONAY AKIŞI
+   Baş harfleri birleştir -> ÜÇ KALP
    ========================================================= */
 function showFinalStepInPanel() {
   if (finalStepShown) return;
@@ -900,7 +935,7 @@ function showFinalStepInPanel() {
       <span class="q-meta">Son Adım</span>
     </div>
     <p class="q-def" style="color: #ffffff; font-weight: 600;">
-      Haritada çözdüğün <b>5 kelimenin baş harflerini sırayla</b> birleştirerek cevabı yaz:
+      Haritada çözdüğün <b>6 kelimenin baş harflerini sırayla</b> birleştirerek şarkıyı yaz:
     </p>
 
     <form id="panel-final-form" autocomplete="off" style="margin-top: 14px;">
@@ -909,7 +944,7 @@ function showFinalStepInPanel() {
           id="panel-final-input"
           class="wordle-input"
           type="text"
-          placeholder="Cevabını yaz..."
+          placeholder="Şarkı adını yaz..."
           maxlength="20"
           autocomplete="off"
           autocorrect="off"
@@ -930,8 +965,16 @@ function showFinalStepInPanel() {
     const guess = cleanTR(finalInput.value).replace(/\s+/g, "");
     const fb = $("feedback-panel-final");
 
-    if (guess === INITIAL_TARGET) {
-      showJokeStep1();
+    if (guess === INITIAL_TARGET || guess === "3KALP") {
+      fb.textContent = "Harika! Şarkı başlıyor... 🎵";
+      fb.className = "feedback ok";
+
+      playSongNow();
+
+      setTimeout(() => {
+        showScreen("screen-player");
+        launchConfetti();
+      }, 600);
     } else {
       fb.textContent = "Cevap doğru değil. Haritadaki kelimelerin baş harflerini sırayla birleştirip tekrar dene!";
       fb.className = "feedback bad";
